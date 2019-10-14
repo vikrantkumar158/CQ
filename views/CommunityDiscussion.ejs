@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CQ</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+*{
+	box-sizing: border-box;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+}
+html{
+	height:100%;
+	overflow:auto;
+}
+::-webkit-scrollbar {
+    display:none;
+}
+body{
+	height:100%;
+	margin: 0;
+	padding: 0;
+	line-height: 1.42857143;
+	background-color: #f1f3f3;
+}
+.preview-image {
+    max-width: 400px;
+    max-height: 400px;
+    border: 6px solid #fff;
+    object-fit: contain;
+}
+@media (max-width: 768px){
+.preview-image{
+    width: 60%;
+    height: 60%;
+}}
+#pmain{
+	position: fixed;
+	left:0px;
+	right:0;
+	top:60px;
+	bottom:0;
+	margin: auto;
+	overflow: auto;
+}
+.dList{
+	background-color: #FFFFFF;
+	border-radius:4px;
+	width:100%;
+	display: inline-block;
+	box-shadow: 0 3px 10px 0 rgba(115,143,147,.3);
+	border: 1px solid #DFDFDF !important;
+}
+.discussionTitle{
+    border: 0;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: bold;
+    word-wrap: break-word;
+    font-size: 20px;
+    outline: none !important;
+    background-color: rgba(0, 0, 0, 0);
+    text-decoration: none !important;
+}
+.discussionBy{
+	border: 0;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    word-wrap: break-word;
+    font-size: 13px;
+    margin: 5px auto 10px auto;
+    outline: none !important;
+}
+.tag-still {
+    font-size: 12px;
+    color: #39739d;
+    background-color: #E1ECF4;
+    border-color: #E1ECF4;
+    position: relative;
+    display: inline-block;
+    padding: .4em .5em;
+    margin: 2px 2px 2px 0;
+    font-size: 11px;
+    line-height: 1;
+    text-align: center;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 3px;
+}
+.comment-div{
+	background-color: rgb(238, 238, 238);
+    border-radius: 10px;
+    padding: 10px;
+    font-family: 'Open Sans', sans-serif;
+}
+#addComment{
+	padding: 10px 0px;
+	border-top:1px solid rgb(223,223,223);
+}
+.hidden{
+	display: none;
+}
+.btn{
+	color:white;
+	display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+	border: 1px solid white; 
+}
+.community-head-btn{
+	border-bottom: 4px solid white;
+}
+.dropDown{
+	position:relative;
+}
+.dDown{
+	display:inline-block;
+	float:right;
+	background-color:#fff;
+	padding:6px 12px;
+	border:2px solid #d1cfcf;
+	cursor:pointer;
+}
+.dCon{
+	position: absolute;
+	top:46px;
+	right:15px;
+	float:left;
+	display:none;
+	white-space:nowrap;
+	overflow:hidden;
+	background-color:#fff;
+	padding:5px 0;border: 2px solid rgba(119, 159, 255, 0.56);
+}
+.dropDown:hover .dCon{
+	display:inline-block;
+}
+#boxx{
+	position: absolute;
+	right:10px;
+	float:left;
+	white-space:nowrap;
+	overflow:hidden;
+	background-color:#fff;
+	border: 2px solid rgba(119, 159, 255, 0.56);	
+	border-radius: 0;
+    border-top-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    z-index: 1000;
+}
+.op{
+	width:100%;
+	display:inline-block;
+	padding:3px 20px;
+	text-decoration:none !important;
+	color:#333333;
+	cursor:context-menu;
+}
+.op:hover{
+	background-color: #DCDCDC;
+}
+.featured-label {
+    width: 10%;
+    border-radius: 0 !important;
+    background-color: #1A9FDA;
+    font-size: 15px;
+    margin: 10px 10px 0 10px !important;
+}
+.global-label {
+    width: 10%;
+    border-radius: 0 !important;
+    background-color: #faa41f;
+    font-size: 15px;
+    margin: 10px 0 0 10px !important;
+}
+</style>
+</head>
+<body>
+<input type="text" value="<%= uId %>" id="userId" style="display: none;">
+<input type="text" value="<%= role %>" id="userRole" style="display: none;">
+<% if(role1=='UAdmin'||role1=='USuperadmin'){ %>
+<% include partials/navbar1 %>
+<% } %>
+<% if(role1=='User'||role1=='Community Builder'){ %>
+<% include partials/navbar2 %>
+<% } %>
+<div id="pmain" class="row">
+<div id="p111" class="col-xs-12 scoll-possible" style="padding:0;">
+<div class="col-xs-12" style="background-image: linear-gradient(to bottom, #4ba2b7, #42a6be, #38aac6, #29adcd, #0fb1d5);padding:6px 0px 0px;display:block;height:50px;">
+</div>
+<div class="container col-xs-11">
+<div class="col-xs-12 col-sm-offset-1 col-sm-2">
+<a href="/community/discussion/<%= community[0]._id %>">
+<img src="/image/<%= community[0].picId %>" style="width:100px;height:100px;box-shadow: 0 0 10px rgba(0,0,0,0.5);margin-top:-40px;border:4px solid #fff;" class="center-block">
+</a>
+</div>
+<div class="col-xs-6 col-sm-7" style="display:inline-block;margin-top:15px;padding:0 15px;color:#337AB7;height:60px;font-size:20px;float:left;font-weight:600;">
+<%= community[0].name %>
+</div>
+<div class="dropDown col-xs-6 col-sm-2" style="display:inline-block;float:right;padding: 15px;z-index: 10;">
+<div class="dDown">
+<i class="fa fa-bars" style="padding:0;font-size:16px;"></i>
+</div>
+<div class="dCon">
+<a href="/community/discussion/<%= community[0]._id %>" style="display:inline-block;padding:3px 20px;text-decoration:none;color:#333333;">Discussion</a><br>
+<% if(role=="owner"){ %>
+	<a href="/community/managecommunity/<%= community[0]._id %>" style="display:inline-block;padding:3px 20px;text-decoration:none;color:#333333;">Manage Community</a><br>
+<% } %>
+<a href="/community/communityprofile/<%= community[0]._id %>" style="display:inline-block;padding:3px 20px;text-decoration:none;color:#333333;">Community Profile</a><br>
+<a href="/community/communitymembers/<%= community[0]._id %>" style="display:inline-block;padding:3px 20px;text-decoration:none;color:#333333;">Community Members</a><br>
+</div>
+</div>
+</div>
+<center>
+    <hr style="border-top:2px solid #E6E6E6;width:85%;margin-top:0;">
+</center>
+<div class="container col-xs-12 col-sm-offset-1 col-sm-10" style="padding:0px 20px;margin-bottom:20px;">
+<div style="border:1px solid rgb(182,182,182);background-color:#f9f9f9;">
+<div style="display:inline-block;padding:5px;background:#f9f9f9;width:100%;">
+<img src="/image/<%= community[0].picId %>" style="height:50px;width:50px;border-radius:50%;border:2px solid #fff;">
+<p style="display:inline-block;color:#878787;font-size:20px;padding:10px 15px 0px;">Start Discussion</p>
+</div>
+
+<form id="f1" action="/addChat/<%= community[0]._id %>" method="POST" enctype="multipart/form-data" autocomplete="off">
+<input id="disctitle" name="disctitle" type="text" placeholder="Enter a discussion title....." style="outline:none;color:black;width:100%;padding:15px;font-weight:bold;border:none;border-top:1px solid #dfdfdf;border-bottom:1px solid #dfdfdf;" required>
+<div id="discussionStart" style="padding:15px;background:#fff;border-bottom:1px solid #dfdfdf;display:none;">
+<textarea id="discinfo" name="discinfo" style="height:32px;width:100%;border:none;font-size:20px;resize:none;padding:2px;outline:none;" placeholder="Enter discussion details" autocomplete="off" required></textarea>
+<div style="padding-bottom:10px;">
+<input id="tags" name="tags" type="text" placeholder="Enter Tag..." style="width:100%;border-radius:3px;border:1px solid #ccc;padding:6px;">
+</div>
+<i class="fa fa-image" style="font-size:30px;" onclick="document.getElementById('imgPath').click();"></i>
+<input id="imgPath" type="file" name="profilePic" accept="image/*" style="display:none;">
+<input type="submit" style="color:#fff;background-color:#337ab7;border:1px solid #2e6da4;float:right;padding:6px 12px;" value="Post">
+</div>
+<div style="padding:10px 15px;"></div>
+</form>
+
+</div>
+</div>
+<% for(var i=0;i<chat.length;++i){ %>
+<% if(chat[i].deleted){ %>
+	<% continue; %>
+<% } %>
+<div class="container discussions col-xs-12 col-sm-offset-1 col-sm-10" style="padding:0px 20px;padding-bottom:20px;">
+<div class="dList">	
+<div style="width: 100%;">
+<% if(chat[i].featured){ %>
+<span class="badge featured-label" id="feature<%= chat[i]._id %>">Featured</span>
+<% }else{ %>
+<span class="badge featured-label hidden" id="feature<%= chat[i]._id %>">Featured</span>
+<% } %>
+<% if(chat[i].global){ %>
+<span class="badge global-label" id="global<%= chat[i]._id %>">Global</span>
+<% }else{ %>
+<span class="badge global-label hidden" id="global<%= chat[i]._id %>">Global</span>
+<% } %>
+</div>
+<% if(uId==chat[i].uId){ %>
+<div style="float:right;position: relative;z-index: 10;">
+<a id="boxdis" class="bdis" style="color: grey;" onclick="menu(this)"><i class="fa fa-ellipsis-h"></i></a>
+<div id="boxx" class="hidden">
+<a class="op" id="/deleteChat/<%= chat[i]._id %>" onclick="deleteChat(this)">Delete</a><br>
+<% if(role=="owner"){ %>
+<a class="op" id="/feature/<%= chat[i]._id %>" onclick="featureChat(this)">
+<% if(chat[i].featured){ %>
+Unfeature
+<% }else{ %>
+Feature
+<% } %>
+</a><br>
+<a class="op" id="/publish/<%= chat[i]._id %>" onclick="publishChat(this)">
+<% if(chat[i].global){ %>
+Unpublish from CQ
+<% }else{ %>
+Publish to CQ
+<% } %>
+</a>
+<% } %>
+</div>
+</div>
+<% }else{ %>
+<div style="padding-top: 10px;"></div>
+<% } %>
+<div class="col-sm-12"><a class="discussionTitle"><%= chat[i].title %></a></div>
+<div class="col-sm-12 discussionBy" style="color: #757575;">
+	posted by <a href="/viewprofile/<%= chat[i].uId %>" class="discussionBy" style="text-decoration:none;"><%= chat[i].name %></a> 
+	<% var date=new Date(chat[i].date) %>
+	<% var arr=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"] %>
+	on <%= arr[date.getMonth()] %> <%= date.getDate() %> <%= date.getFullYear() %>
+</div>
+<div class="panel-body" style="padding:0">    
+	<div class="col-sm-12 col-xs-12 tagMainDiv" style="border-top: 1px solid white;padding:0">       
+		<div class="col-sm-12">
+			<% var res=chat[i].tag.split(" ") %>
+			<% res.forEach(function(tags){ %>
+			<span class="tag-still"><%= tags %></span>
+			<% }); %>       
+		</div>     
+	</div>    
+</div>
+<div class="col-sm-12" style="padding-top:10px;font-size: 16px;">
+	<%= chat[i].details %>
+</div>
+<% if(chat[i].pics!=""){ %>
+<div class="col-sm-12" style="padding-top:10px;">
+	<center>
+<img src="/image/<%= chat[i].pics %>" class="preview-image" style="border:6px solid #fff;">
+	</center>
+</div>
+<% } %>	
+<div class="col-sm-12 panel" style="padding-top:10px;box-shadow: none;">
+	<a onclick="getComments(this)" id="<%= chat[i]._id %>" style="color:#757575;font-weight:bold;font-size:13px;text-decoration:none;cursor:pointer;"><i class="fas fa-comment-alt"></i> <%= chat[i].count %> comment</a>
+	<a class="hidden" onclick="showHide(this)" style="color:#757575;font-weight:bold;font-size:13px;text-decoration:none;cursor:pointer;">Hide</a>
+</div><div class="col-sm-12 mainComment hidden" style="padding: 10px 0px;border-top:1px solid rgb(223,223,223);">
+</div><div class="col-sm-12 hidden" id="addComment" style="display: inline-block;">
+	<div class="col-sm-1 col-xs-2">
+		<img src="/image/<%= pId %>" style="height:40px;width:40px;border-radius:50%;opacity:0.5;">
+	</div>
+	<div class="col-sm-11 col-xs-10">
+
+	<form class="f2" id="/addReply/<%= chat[i]._id %>" enctype="application/json" autocomplete="off" onsubmit="f2(this)">
+		<div class="input-group" style="padding:5px;">                      
+			<textarea type="text" name="reply" autocomplete="off" class="form-control input-md comment-textarea" placeholder="reply to this discussion..." rows="1" maxlength="1500" style="resize:none;"></textarea>                  
+			<span class="input-group-btn" style="padding-left:5px">                        
+				<button type="submit" class="btn btn-warning btn-md" style="outline:none;">
+				Post
+				</button>                   
+			</span>                  
+		</div>
+	</form>
+
+	</div>
+</div>	
+</div>
+</div>
+<% } %>
+</div>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script>
+document.getElementsByClassName('anc')[1].classList.add('active');
+document.getElementsByClassName('fa-users')[0].classList.add('act');
+var x=document.getElementById('disctitle');
+var d;
+x.onclick=function()
+{
+	document.getElementById("discussionStart").style.display="";
+}
+function getDays(x)
+{
+	var date1 = new Date(x); 
+	var date2 = new Date(); 
+  	var Difference_In_Time = date2.getTime() - date1.getTime(); 
+	var Difference_In_Days = Math.floor(Difference_In_Time / (1000 * 3600 * 24));
+	Difference_In_Days = Difference_In_Days + "d";
+	if(Difference_In_Days=="0d")
+	{
+		Difference_In_Days=	Math.floor(Difference_In_Time / (1000 * 3600));
+		Difference_In_Days = Difference_In_Days + "h";
+	} 
+	if(Difference_In_Days=="0h")
+	{
+		Difference_In_Days=	Math.floor(Difference_In_Time / (1000 * 60));
+		Difference_In_Days = Difference_In_Days + "m";
+	}
+	if(Difference_In_Days=="0m")
+	{
+		Difference_In_Days= "Just Now";
+	}
+  	return Difference_In_Days;
+}
+function getComments(elem)
+{
+	var xhttp=new XMLHttpRequest();
+	xhttp.open("GET","/getComments/"+elem.id);
+	xhttp.setRequestHeader("Content-Type","application/json");
+	xhttp.send();
+	xhttp.onload=()=>{
+		var data=JSON.parse(xhttp.responseText);
+		$(elem).parent().next().empty();
+		d='';
+		for(var i=0;i<data.length;++i)
+		{
+			if(data[i].deleted)
+				continue;
+			d='';
+			d+='<div class="comment col-sm-12">';
+			d+='<div class="col-sm-1 col-xs-2">';
+			d+='<img src="/img/'+data[i].uId+'"style="height:40px;width:40px;border-radius:50%;opacity:0.5;"></div>';
+			d+='<div class="col-sm-10 col-xs-10">' ;   
+			d+='<div class="comment-container">';      
+			d+='<a href="/viewprofile/'+data[i].uId+'" style="font-weight:bold;cursor:pointer;text-decoration:none;">'+data[i].name+'</a>';      
+			d+='<span style="padding:5px;color:#337AB7;font-weight:bold;">'+getDays(data[i].date)+'</span>';
+			if(document.getElementById('userId').value==data[i].uId)
+			{
+				d+='<i id="del'+data[i]._id+'" name="'+data[i].pId+'" onclick="deleteReply(this)" class="fa fa-trash" style="color:#74CA5F;padding:10px;font-size:15px;"></i>';
+			}
+			d+='<a onclick="getReply(this)" id="'+data[i]._id+'" class="fa fa-reply" style="color:#A6A6A6;padding:10px;font-size:15px;cursor:pointer;">('+data[i].count+')</a>';
+			d+='<p class="comment-div">'+data[i].details+'</p>';
+			d+='</div></div></div>';
+			d+='<div class="col-sm-8 col-xs-10 col-sm-push-1 col-xs-push-2 reply"></div>'
+			d+='<div class="col-sm-8 col-xs-8 col-sm-push-2 col-xs-push-3 input-group addReply hidden">';
+		d+='<form class="f3" id="/addReplyReply/'+data[i]._id+'" enctype="application/json" autocomplete="off" onsubmit="f3(this)">';
+			d+='<div class="col-sm-12">';
+			d+='<textarea type="text" name="reply" autocomplete="off" class="form-control input-sm comment-textarea" placeholder="reply to this comment..." maxlength="1500" style="width:100%;resize:none;"></textarea>';
+			d+='</div>';
+			d+='<div class="col-sm-12 center-all">';
+			d+='<button type="submit" class="btn btn-primary post-discussion-btn"style="border-radius:0;margin-top:2px;width:100%">Reply</button>';
+			d+='</div>';
+			d+='</form></div>';
+			$(elem).parent().next().append(d);
+		}
+		if(data.length!=0&&d!='')
+		{
+			elem.parentElement.nextSibling.classList.remove("hidden");
+		}
+		else if(elem.parentElement.nextSibling.classList.contains("hidden")==false&&d=='')
+		{
+			elem.parentElement.nextSibling.classList.add("hidden");	
+		}
+		elem.parentElement.nextSibling.nextSibling.classList.remove("hidden");
+		if(elem.nextElementSibling.classList.contains("hidden"))
+		{
+			elem.nextElementSibling.classList.remove("hidden");
+		}
+		elem.nextElementSibling.innerHTML="Hide";
+	}
+}
+function showHide(elem)
+{
+	if(elem.parentElement.nextSibling.classList.contains("hidden")&&elem.innerHTML=="Show")
+	{
+		elem.parentElement.nextSibling.classList.remove("hidden");
+		elem.parentElement.nextSibling.nextSibling.classList.remove("hidden");
+		elem.innerHTML="Hide";
+	}
+	else if(elem.parentElement.nextSibling.classList.contains("hidden")==false&&elem.innerHTML=="Hide")
+	{
+		elem.parentElement.nextSibling.classList.add("hidden");
+		elem.parentElement.nextSibling.nextSibling.classList.add("hidden");
+		elem.innerHTML="Show";
+	}
+	else
+	{
+		elem.parentElement.nextSibling.nextSibling.classList.toggle("hidden");
+		if(elem.innerHTML=="Hide")
+			elem.innerHTML="Show";
+		else
+			elem.innerHTML="Hide";
+	}	
+}
+function getReply(elem)
+{
+	var xhttp=new XMLHttpRequest();
+	xhttp.open("GET","/getComments/"+elem.id);
+	xhttp.setRequestHeader("Content-Type","application/json");
+	xhttp.send();
+	xhttp.onload=()=>{
+		var data=JSON.parse(xhttp.responseText);
+		$(elem).parent().parent().parent().next().empty();
+		for(var i=0;i<data.length;++i)
+		{
+			if(data[i].deleted)
+				continue;
+			d='';
+			d+='<div class="col-sm-12" style="padding: 10px 0px;">';
+			d+='<div class="col-sm-1 col-xs-2">';
+			d+='<img src="/img/'+data[i].uId+'" style="float:right;height:30px;width:30px;border-radius:50%;opacity:0.5;"></div>';
+			d+='<div class="col-sm-10 col-xs-10">';
+			d+='<div class="comment-container">';
+			d+='<a href=href="/viewprofile/'+data[i].uId+'" style="font-weight:bold;cursor:pointer;text-decoration:none;">'+data[i].name+'</a>';      
+			d+='<span style="padding:5px;color:#337AB7;font-weight:bold;">'+getDays(data[i].date)+'</span>';
+			if(document.getElementById('userId').value==data[i].uId)
+			{
+				d+='<i id="del'+data[i]._id+'" name="'+data[i].pId+'" onclick="deleteReplyReply(this)" class="fa fa-trash" style="color:#74CA5F;padding:10px;font-size:15px;"></i>';
+			}
+			d+='<p class="comment-div">'+data[i].details+'</p>';
+			d+='</div></div></div>';
+			$(elem).parent().parent().parent().next().append(d);
+		}
+	}
+	elem.parentElement.parentElement.parentElement.nextSibling.nextSibling.classList.remove("hidden");
+}
+$("#f1").submit(function(e) {
+    e.preventDefault();
+    var form = $(this);
+    var url = form.attr('action');
+    $.ajax({
+    	type: "POST",
+      	url: url,
+       	data: new FormData(this),
+       	cache: false,
+        contentType: false,
+        processData: false,
+       	success: function(data)
+       	{
+       		form.trigger("reset");
+        	var xdiv='<div class="container discussions col-xs-12 col-sm-offset-1 col-sm-10" style="padding:0px 20px;padding-bottom:20px;">';
+			xdiv+='<div class="dList">';
+			xdiv+='<div style="width: 100%;">';
+			xdiv+='<span class="badge featured-label hidden" id="feature'+data._id+'">Featured</span>';
+			xdiv+='<span class="badge global-label hidden" id="global'+data._id+'">Global</span></div>';
+			xdiv+='<div style="float:right;position:relative;z-index:10;">';
+			xdiv+='<a id="boxdis" class="bdis" style="color: grey;" onclick="menu(this)"><i class="fa fa-ellipsis-h"></i></a>';
+			xdiv+='<div id="boxx" class="hidden">';
+			xdiv+='<a class="op" id="/deleteChat/'+data._id+'" onclick="deleteChat(this)">Delete</a><br>';
+			if(document.getElementById('userRole').value=="owner")
+			{
+				xdiv+='<a class="op" id="/feature/'+data._id %>+'" onclick="featureChat(this)">Feature</a><br>';
+				xdiv+='<a class="op" id="/publish/'+data._id %>+'" onclick="publishChat(this)">Publish to CQ</a>';
+			}
+			xdiv+='</div></div>';
+			xdiv+='<div class="col-sm-12"><a class="discussionTitle">'+data.title+'</a></div>'
+			xdiv+='<div class="col-sm-12 discussionBy" style="color: #757575;">';
+			var date=new Date(data.date)
+			var arr=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"];
+			var str=arr[date.getMonth()]+" "+date.getDate()+" "+date.getFullYear();
+			xdiv+='posted by <a href="/viewprofile/'+data.uId+'" class="discussionBy" style="text-decoration:none;">'+data.name+'</a> on '+str+'</div>';
+			xdiv+='<div class="panel-body" style="padding:0">';
+			xdiv+='<div class="col-sm-12 col-xs-12 tagMainDiv" style="border-top: 1px solid white;padding:0">';
+			xdiv+='<div class="col-sm-12">';
+			var res=data.tag.split(" ");
+			res.forEach(function(tags){
+			xdiv+='<span class="tag-still">'+tags+'</span>';
+			});      
+			xdiv+='</div></div></div>';
+			xdiv+='<div class="col-sm-12" style="padding-top:10px;font-size: 16px;">';
+			xdiv+=data.details;
+			xdiv+='</div>';
+			if(data.pics!=""){
+				xdiv+='<div class="col-sm-12" style="padding-top:10px;"><center>';
+				xdiv+='<img src="/image/'+data.pics+'" class="preview-image" style="border:6px solid #fff;">';
+				xdiv+='</center></div>';
+			}	
+			xdiv+='<div class="col-sm-12 panel" style="padding-top:10px;box-shadow: none;">';
+			xdiv+='<a onclick="getComments(this)" id="'+data._id+'" style="color:#757575;font-weight:bold;font-size:13px;text-decoration:none;cursor:pointer;">';
+			xdiv+='<i class="fas fa-comment-alt"></i> '+data.count+' comment</a>';
+			xdiv+='<a class="hidden" onclick="showHide(this)" style="color: #757575;font-weight: bold;font-size: 13px;text-decoration: none;cursor: pointer;">Hide</a>';
+			xdiv+='</div><div class="col-sm-12 mainComment hidden" style="padding: 10px 0px;border-top:1px solid rgb(223,223,223);">';
+			xdiv+='</div><div class="col-sm-12 hidden" id="addComment" style="display: inline-block;">';
+			xdiv+='<div class="col-sm-1 col-xs-2">';
+			xdiv+='<img src="'+document.getElementsByClassName('img1')[0].src+'" style="height:40px;width:40px;border-radius:50%;opacity:0.5;">';
+			xdiv+='</div><div class="col-sm-11 col-xs-10">';
+			xdiv+='<form class="f2" id="/addReply/'+data._id+'" enctype="application/json" autocomplete="off" onsubmit="f2(this)">';
+			xdiv+='<div class="input-group" style="padding:5px;">';
+			xdiv+='<textarea type="text" name="reply" autocomplete="off" class="form-control input-md comment-textarea" placeholder="reply to this discussion..." rows="1" maxlength="1500" style="resize:none;"></textarea>';
+			xdiv+='<span class="input-group-btn" style="padding-left:5px">';
+			xdiv+='<button type="submit" class="btn btn-warning btn-md" style="outline:none;">Post</button></span></div></form></div></div>	</div></div>';
+			$('#p111').append(xdiv);
+       	}
+    });
+});
+
+function f2(elem){
+	event.preventDefault();
+    var form = $(elem);
+    var url = form.attr('id');
+    $.ajax({
+    	type: "POST",
+      	url: url,
+       	data: form.serialize(),
+       	success: function(data)
+       	{
+       		form.trigger("reset");
+       		document.getElementById(url.substring(10)).click();
+       		var temp=document.getElementById(url.substring(10)).innerHTML;
+       		temp=parseInt(temp.substring(54));
+       		temp=temp+1;
+       	document.getElementById(url.substring(10)).innerHTML='<i class="fas fa-comment-alt"></i> '+temp+' comment';
+       	}
+    });
+}
+
+function f3(elem){
+	event.preventDefault();
+    var form = $(elem);
+    var url = form.attr('id');
+    $.ajax({
+    	type: "POST",
+      	url: url,
+       	data: form.serialize(),
+       	success: function(data)
+       	{
+       		form.trigger("reset");
+       		document.getElementById(url.substring(15)).click();
+       		var temp=document.getElementById(url.substring(15)).innerHTML;
+       		temp=parseInt(temp.substring(1));
+       		temp=temp+1;
+       		document.getElementById(url.substring(15)).innerHTML='('+temp+')';
+       	}
+    });
+}
+function deleteReply(elem)
+{
+	var e=$(elem);
+	$.ajax({
+		type: "PUT",
+		url: "/deleteReply/"+e.attr('id').substring(3),
+		success: function(data)
+		{
+			document.getElementById(e.attr('name')).click();
+			var temp=document.getElementById(e.attr('name')).innerHTML;
+       		temp=parseInt(temp.substring(54));
+       		temp=temp-1;
+       	document.getElementById(e.attr('name')).innerHTML='<i class="fas fa-comment-alt"></i> '+temp+' comment';
+			document.getElementById("alert2Center").innerHTML="Comment Deleted Successfully";
+			document.getElementById("alert2").style.height="60px";
+			document.getElementById("alert2").style.padding="20px";
+			setTimeout(function(){
+			document.getElementById("alert2").style.height="0px";
+			document.getElementById("alert2").style.padding="0px";
+			},2000);
+		}
+	});
+}
+function deleteReplyReply(elem)
+{
+	var e=$(elem);
+	$.ajax({
+		type: "PUT",
+		url: "/deleteReplyReply/"+e.attr('id').substring(3),
+		success: function(data)
+		{
+			document.getElementById(e.attr('name')).click();
+			var temp=document.getElementById(e.attr('name')).innerHTML;
+       		temp=parseInt(temp.substring(1));
+       		temp=temp-1;
+       		document.getElementById(e.attr('name')).innerHTML='('+temp+')';
+			document.getElementById("alert2Center").innerHTML="Comment Deleted Successfully";
+			document.getElementById("alert2").style.height="60px";
+			document.getElementById("alert2").style.padding="20px";
+			setTimeout(function(){
+			document.getElementById("alert2").style.height="0px";
+			document.getElementById("alert2").style.padding="0px";
+			},2000);
+		}
+	});
+}
+function menu(elem)
+{
+	if(elem.nextElementSibling.classList.contains("hidden"))
+		elem.nextElementSibling.classList.remove("hidden");
+	else
+		elem.nextElementSibling.classList.add("hidden");
+}
+function deleteChat(elem)
+{
+	var e=$(elem);
+	$.ajax({
+		type: "PUT",
+		url: e.attr('id'),
+		success: function(data)
+		{
+			e.parent().parent().parent().parent().remove();
+			document.getElementById("alert2Center").innerHTML="Discussion Deleted Successfully";
+			document.getElementById("alert2").style.height="60px";
+			document.getElementById("alert2").style.padding="20px";
+			setTimeout(function(){
+			document.getElementById("alert2").style.height="0px";
+			document.getElementById("alert2").style.padding="0px";
+			},2000);
+		}
+	});
+}
+function featureChat(elem)
+{
+	var e=$(elem);
+	var d={type: e.html().replace(/\s/g, "")};
+	$.ajax({
+		type: "PUT",
+		url: e.attr('id'),
+		data: d,
+		success: function(data)
+		{
+			if(e.html().replace(/\s/g, "")=="Feature")
+			{
+				e.html("Unfeature");
+				document.getElementById("feature"+e.attr('id').substring(9)).classList.remove("hidden");
+			}
+			else if(e.html().replace(/\s/g, "")=="Unfeature")
+			{
+				e.html("Feature");
+				document.getElementById("feature"+e.attr('id').substring(9)).classList.add("hidden");
+			}
+		}
+	});
+}
+function publishChat(elem)
+{
+	var e=$(elem);
+	var d={type: e.html().replace(/\s/g, "")};
+	$.ajax({
+		type: "PUT",
+		url: e.attr('id'),
+		data: d,
+		success: function(data)
+		{
+			if(e.html().replace(/\s/g, "")=="PublishtoCQ")
+			{
+				e.html("Unpublish from CQ");
+				document.getElementById("global"+e.attr('id').substring(9)).classList.remove("hidden");
+			}
+			else if(e.html().replace(/\s/g, "")=="UnpublishfromCQ")
+			{
+				e.html("Publish to CQ");
+				document.getElementById("global"+e.attr('id').substring(9)).classList.add("hidden");
+			}
+		}
+	});
+}
+</script>
+</html>

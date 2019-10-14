@@ -1,0 +1,705 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/trumbowyg/dist/ui/trumbowyg.min.css">
+<style>
+*{
+	box-sizing: border-box;
+}
+html{
+	height:100%;
+	overflow:auto;
+}
+::-webkit-scrollbar {
+    display:none;
+}
+body{
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	line-height: 1.42857143;
+	background-color: #f1f3f3;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+}
+.alert-wrappernb{
+	position: absolute;
+	width: 100%;
+}
+.alertnb {
+	display: inline-grid;
+	z-index: 10;
+	position: relative;
+	width: 100%;
+	height: 0px;
+	background-color: #f44336;
+	overflow: hidden;
+	color: white;
+	transition: 0.5s;
+}
+#email{
+	background: rgba(0,0,0,0.5); 
+	position: fixed;
+	top:0;
+	right:0;
+	bottom:0;
+	left:0;
+	width:100%;
+	z-index:11;
+	overflow: auto;
+	color:#333333;
+}
+#emailx1{
+	background: rgba(0,0,0,0.5); 
+	position: fixed;
+	top:0;
+	right:0;
+	bottom:0;
+	left:0;
+	width:100%;
+	z-index:11;
+	overflow: auto;
+	color:#333333;
+}
+#emailBorx1{
+	display: block;
+	position:relative;
+	transform: translate(0,0);
+	transition: transform .3s ease-out;
+	width: 600px;
+	margin: 30px auto;
+}
+#emailBoxx1{
+	overflow: hidden;
+	display: block;
+	box-shadow: 0 5px 15px rgba(0,0,0,.5);
+	position: relative;
+	background-color:#fff;
+	border: 1px solid rgba(0,0,0,.2);
+	border-radius: 6px;
+}
+.fade {
+    opacity: 0;
+    transition: opacity .15s linear;
+}
+.fade.in{
+	opacity: 1;
+}
+#emailBor{
+	display: block;
+	position:relative;
+	transform: translate(0,0);
+	transition: transform .3s ease-out;
+	width: 600px;
+	margin: 30px auto;
+}
+#emailBox{
+	overflow: hidden;
+	display: block;
+	box-shadow: 0 5px 15px rgba(0,0,0,.5);
+	position: relative;
+	background-color:#fff;
+	border: 1px solid rgba(0,0,0,.2);
+	border-radius: 6px;
+}
+.fillbox{
+	background-color:#ffffff;
+	display:block;
+	padding:6px 12px;
+	width:100%;
+	height:34px;
+	color:#555;
+	border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.d1{
+	overflow: hidden;
+	background-color: #222D3C;
+	height: 60px;
+	z-index:1;
+	width: 100%;
+	display: block;
+    padding: 0px 20px;
+}
+#div1-wrapper{
+	height: 60px;
+}
+.d1 a{
+	float: left;
+	color: #f2f2f2;
+	text-align: center;
+	padding-right: 50px;
+	text-decoration: none;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 20px;
+	font-weight: bold;
+}
+.d1{
+	padding-top: 15px;
+	box-sizing: border-box;
+}
+.d1 span{
+	color: white;
+}
+.d2{
+	height: 100%;
+	width: 50px;;
+	position: fixed;
+	z-index: 1;
+	top: 60px;
+	left: 0;
+	background-color: #000000;
+	overflow: auto;
+	transition: 0.5s;
+}
+#div2-wrapper{
+	position: absolute;
+	display: inline-block;
+}
+.d2 a{	
+	display: block; 
+	padding: 11px 4px 11px 15px;
+	text-decoration: none;
+	color: #999999;
+	transition: 0.1s;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 15px;
+	white-space: nowrap;
+	cursor: pointer;
+}
+.fa{
+	font-size: 21px;
+	padding-right: 10px;
+}
+.d2 a:hover:not(.active){
+	background-color: #111; 
+	border-left: 2px solid red;
+	color: white;
+}
+.active{
+	background-color: #337AB7; 
+}
+.active:hover{
+	border-left: 2px solid red;
+}
+.d2 img{
+	width: 60px;
+	height: 60px;
+}
+.act{
+	color: white;
+}
+.sadmin{
+	float: right;
+	padding: .2em .6em .3em;
+	font-size: 75%;
+	margin-top: 7px;
+    font-weight: 700;
+    line-height: 1;
+	border-radius: 4px;
+}
+.img1{
+	cursor: pointer;
+    width: 40px;
+    margin-left: 30px;
+    margin-right: 10px;
+    float: right;
+    border-radius: 50%;
+}
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+	z-index:20;
+}
+#div6-wrapper{
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index:10;
+	width:100%;
+}
+.animdiv{
+	position:relative;
+	width:0%;
+	height:0;
+	overflow: hidden;
+	transition-duration: 0.4s;
+    	transition-timing-function: cubic-bezier(0.36, 0.55, 0.19, 1);
+	transition-property: width, height; 
+}
+#div3{
+	background-color: #414F66;
+	opacity:0.95;
+}
+#div6,#divde6,#divac6{
+	background-color: rgba(112,128,144,0.2);	
+    display:inline-block;
+}
+#divx6{
+	position: absolute;
+	left:0;
+	right:0;
+	top:0;
+	bottom:0;
+	background-color: rgba(112,128,144,0.2);	
+	margin:0 auto;
+    display:inline-block;
+}
+@media (min-width : 0px) {
+    #divxx9 { display:inline-block;width: 83.33%; }
+}    
+@media (min-width : 768px) {
+    #divxx9 { display:inline-block;width: 345px; }
+}
+@media (min-width : 992px) {
+    #divxx9 { display:inline-block;width: 293.33px; }
+}
+#divxx9{
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index:20;
+    transform: translate(-50%, -50%);
+	margin: auto;
+	overflow: hidden;
+	float: left;
+	border-radius: 5px;
+	box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+	padding: 15px 15px;
+	margin-left:auto;
+	margin-right:auto;
+	line-height: 20px;
+}
+#b4,#b3{
+	text-rendering: auto;
+	height: 32px;
+	color:white;
+	font-size: 14px;
+	font-weight: 900;
+	margin:0px 2px 4px;
+	padding: 6px 12px;
+	text-align: center;
+	cursor: pointer;
+	border: 0;
+	border-radius: 4px;
+	float: right;
+}
+#b3{
+	background-color:#5cb85c;
+}
+#b4{
+	background-color:#d9534f;
+}
+#b1,#b2{
+	background-color:#303F53;
+	color:white;
+	text-shadow:none;
+	padding:10px;
+	min-width:100px;
+	font-size:16px;
+	cursor:pointer;
+	border:0;
+	border-radius:2px;
+	margin-bottom: 4px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+.d4{
+	animation: shake 0.82s infinite;
+	transform: translate3d(0, 0, 0);
+	backface-visibility: hidden;
+	animation-play-state: paused;
+}
+@keyframes shake{
+	0%,%,55%,85% { transform: translate(1px, 0px); }
+	10%,30%,60%,90% { transform: translate(-1px, -0px); }
+	20%,35%,65%,95% { transform: translate(-4px, 0px); }
+	30%,40%,70%,100% { transform: translate(4px, 0px); }
+	40%,45%,75% { transform: translate(-8px, 0px); }
+	50%,50%,80% { transform: translate(8px, 0px); 
+}
+#b1,#b2{
+	animation-play-state: paused;
+}
+</style>
+<div class="alert-wrappernb">
+<div class="alertnb" id="alert1">
+	<center id="alert1Center">
+	</center>
+</div>
+</div>
+<div class="alert-wrappernb">
+<div class="alertnb" id="alert2" style="background-color:#4CAF50">
+	<center id="alert2Center">
+	</center>
+</div>
+</div>
+<div id="email" class="fade" style="display:none;">
+<div id="emailBor">
+<div id="emailBox">
+<div style="padding: 15px;border-bottom:1px solid #eee;">
+<span style="font-size:18px;">Send Reminder Mail</span>
+<button type="button" onclick="document.getElementById('email').style.display='none';document.getElementById('email').classList.remove('in');" style="float:right;cursor:pointer;border:0;background-color:inherit;font-weight:700;color:#333333;">X</button>
+</div>
+<div style="position:relative;padding:15px;display:block;overflow:hidden;">
+<div style="display:block;margin-bottom:15px;margin-left:-15px;margin-right:-15px;overflow:auto;">
+<span style="position:relative;display:inline-block;padding:7px 15px 0px;font-size:14px;font-weight:700;text-align:right;width:16.67%;float:left;">To:</span>
+<div style="width:83.33%;float:left;position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;">
+<input type="email" class="fillbox" id="emailid" style="background-color:#eee;" readonly>
+</div>
+</div>
+<div style="display:block;margin-bottom:15px;margin-left:-15px;margin-right:-15px;overflow:auto;">
+<span style="position:relative;display:inline-block;padding:7px 15px 0px;font-size:14px;font-weight:700;text-align:right;width:16.67%;float:left;">Subject:</span>
+<div style="width:83.33%;float:left;position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;">
+<input type="email" class="fillbox" id="emailsub" style="background-color:#ffffff;" placeholder="(This mail is from CQ)">
+</div>
+</div>
+<div style="padding:15px 0px;">
+<div style="margin:17px 0px;">
+<div id="trumbowyg-demo" style="padding:0px 5px;background-color:#ECF0F1;">
+</div>
+</div>
+</div>
+<div style="margin-left:16.67%;width:83.33%;float:left;">
+<button id="sendMail" style="display:block;float:right;color: #333;background-color: #fff;border-color: #ccc;padding: 6px 12px;cursor:pointer;border: 1px solid #ccc;">Send</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="emailx1" class="fade" style="display:none;">
+<div id="emailBorx1">
+<div id="emailBoxx1">
+<div style="padding: 15px;border-bottom:1px solid #eee;">
+<span id="emailx1Title" style="font-size:18px;"></span>
+<button type="button" onclick="document.getElementById('emailx1').style.display='none';document.getElementById('emailx1').classList.remove('in');" style="float:right;cursor:pointer;border:0;background-color:inherit;font-weight:700;color:#333333;font-size:21;opacity:0.3;">x</button>
+</div>
+<div style="position:relative;padding:15px;display:block;border-bottom:1px solid #eee;">
+<div style="display:block;margin:15px -15px;overflow:auto;">
+<span style="position:relative;display:inline-block;padding:7px 15px 0px;font-size:14px;font-weight:700;text-align:right;width:16.67%;float:left;">Username:</span>
+<div style="width:83.33%;float:left;position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;">
+<input type="email" class="fillbox" id="emailidx1">
+</div>
+</div>
+<div style="display:block;margin-bottom:15px;margin-left:-15px;margin-right:-15px;overflow:auto;">
+<span style="position:relative;display:inline-block;padding:7px 15px 0px;font-size:14px;font-weight:700;text-align:right;width:16.67%;float:left;">Phone:</span>
+<div style="width:83.33%;float:left;position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;">
+<input type="email" class="fillbox" id="emailsubx1">
+</div>
+</div>
+<div style="display:block;margin-bottom:15px;margin-left:-15px;margin-right:-15px;overflow:auto;">
+<span style="position:relative;display:inline-block;padding:7px 15px 0px;font-size:14px;font-weight:700;text-align:right;width:16.67%;float:left;">City:</span>
+<div style="width:83.33%;float:left;position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;">
+<input type="email" class="fillbox" id="emailsubx2">
+</div>
+</div>
+<div style="display:block;margin-bottom:15px;margin-left:-15px;margin-right:-15px;overflow:auto;">
+<span style="position:relative;display:inline-block;padding:7px 15px 0px;font-size:14px;font-weight:700;text-align:right;width:16.67%;float:left;">Status:</span>
+<div style="width:83.33%;float:left;position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;">
+<select class="fillbox" id="emailsubx3">
+<option value="Pending">Pending</option>
+<option value="Confirmed">Confirmed</option>
+</select>
+</div>
+</div>
+<div style="display:block;margin-bottom:15px;margin-left:-15px;margin-right:-15px;overflow:auto;">
+<span style="position:relative;display:inline-block;padding:7px 15px 0px;font-size:14px;font-weight:700;text-align:right;width:16.67%;float:left;">Status:</span>
+<div style="width:83.33%;float:left;position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;">
+<select class="fillbox" id="emailsubx4">
+<option value="User">User</option>
+<option value="Community Builder">Community Builder</option>
+<option value="Admin">Admin</option>
+</select>
+</div>
+</div>
+<div style="display:block;margin-bottom:15px;margin-left:-15px;margin-right:-15px;overflow:auto;">
+<div style="margin-left:16.67%;width:83.33%;float:left;position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;">
+<input class="fillbox" id="emailsubx5" type="submit" value="Update" onclick="updateUser()"style="display:inline-block;width:auto;border-radius:0;">
+</div>
+</div>
+</div>
+<div style="padding:15px;overflow:auto;">
+<input class="fillbox" type="submit" value="Close" style="display:inline-block;width:auto;float:right;border-radius:0;" onclick="document.getElementById('emailx1').style.display='none';document.getElementById('emailx1').classList.remove('in');">
+</div>
+</div>
+</div>
+</div>
+<div id="div1-wrapper">
+<div id="div1" class="d1">
+<a href="javascript:window.location.href=window.location.href">cq</a>
+<span style="cursor:pointer;top: 5px;left:30px;position:relative" id="funcnav1" onclick="funcNav()"><i class="fa fa-th-large" style="font-size:16px;"></i></span>
+<img class="img1 hidden-xs" src="/image/<%= pId %>" style="height: 40px;display: block">
+<span class="sadmin hidden-xs" style="background-color: #5cb85c;margin-left:5px">admin</span>
+<span class="sadmin" style="background-color: #f0ad4e;"><%= name %></span>
+</div>
+</div>
+<div id="div2-wrapper" class="hidden-xs">
+<div id="div2" class="d2">
+<div class="visible-xs">
+<center>
+<img src="/image/<%= pId %>" style="height:75px;width:75px;margin:15px;">
+</center>
+</div>
+<a id="funcnav2" class="hidden-xs" onclick="funcNav()"><span class="fa"><i class="fa fa-bars"></i></span>cq</a>
+<a class="anc" href="/admin/profile"><span class="fa"><i class="fa fa-home"></i></span>Home</a>
+<a class="anc" href="/admin/adduser"><span class="fa"><i class="fa fa-plus-square"></i></span>Add User</a>
+<a class="anc" href="/admin/userlist"><span class="fa"><i class="fa fa-list-ul"></i></span>User List</a>
+<a class="anc" href="/community/communityList"><span class="fa"><i class="fa fa-list-alt"></i></span>Community List</a>
+<a onclick="changeState()"><span class="fa"><i class="fa fa-toggle-off"></i></span>Switch As User</a>
+<a class="anc" href="/tag"><span class="fa"><i class="fa fa-tags"></i></span>Tag Panel</a>
+<a class="anc" href="/changePassword"><span class="fa"><i class="fa fa-lock"></i></span>Change Password</a>
+<a onclick="logOut()"><span class="fa"><i class="fa fa-sign-out-alt"></i></span>Logout</a>
+</div>
+</div>
+
+<div id="div6-wrapper">
+<div id="div6" class="animdiv">
+<div id="div7" style="width:100%;height:100vh;" onclick="anim()" class="d4">
+<div id="divxx9" style="background-color:white;">
+<div style="font-family:Helvetica;font-size:22px;color:#575757;padding:0px 0px 15px;text-rendering: auto;">Switch As User</div>
+<div style="font-family:Helvetica;color:#575757;font-size:14px;padding:0px 0px 20px;text-rendering: auto;">Do you really want switch state...</div>
+<button id="b4" onclick="noChange()" style="display:inline-block;">NO</button>
+<button id="b3" onclick="chState()" style="display:inline-block;">YES</button>
+</div>
+</div>
+</div>
+</div>
+
+<div id="div6-wrapper">
+<div id="divde6" class="animdiv">
+<div id="divde7" style="width:100%;height:100vh;" onclick="animde()" class="d4">
+<div id="divxx9" style="background-color:white;">
+<div style="font-family:Helvetica;font-size:22px;color:#575757;padding:0px 0px 15px;text-rendering: auto;">Deactivate User ?</div>
+<div id="deUser" style="font-family:Helvetica;color:#575757;font-size:14px;padding:0px 0px 20px;text-rendering: auto;">Are you sure you want to Deactivate </div>
+<button id="b4" onclick="noChangeDe()" style="display:inline-block;">NO</button>
+<button id="b3" onclick="chStateDe()" style="display:inline-block;">YES</button>
+</div>
+</div>
+</div>
+</div>
+
+<div id="div6-wrapper">
+<div id="divac6" class="animdiv">
+<div id="divac7" style="width:100%;height:100vh;" onclick="animac()" class="d4">
+<div id="divxx9" style="background-color:white;">
+<div style="font-family:Helvetica;font-size:22px;color:#575757;padding:0px 0px 15px;text-rendering: auto;">Activate User ?</div>
+<div id="acUser" style="font-family:Helvetica;color:#575757;font-size:14px;padding:0px 0px 20px;text-rendering: auto;">Are you sure you want to Activate </div>
+<button id="b4" onclick="noChangeAc()" style="display:inline-block;">NO</button>
+<button id="b3" onclick="chStateDe()" style="display:inline-block;">YES</button>
+</div>
+</div>
+</div>
+</div>
+
+<div id="div6-wrapper">
+<div id="divx6" class="animdiv">
+<div id="divx7" style="width:100%;height:100vh;" onclick="anime()" class="d4">
+<div id="divxx9" style="background-color:white;">
+<div style="font-family:Helvetica;font-size:22px;color:#575757;padding:0px 0px 15px;text-rendering: auto;">Invalid!</div>
+<div style="font-family:Helvetica;color:#575757;font-size:14px;padding:0px 0px 20px;text-rendering: auto;">User already exist</div>
+<button id="b3" onclick="backAdd()" style="display:inline-block;">OK</button>
+</div>
+</div>
+</div>
+</div>
+
+<footer>
+<div id="div3" class="animdiv">
+<div id="div4" style="display:table;width:100%;height:100vh;" onclick="ani()" class="d4">
+<div id="div5" style="display:table-cell;text-align:center;margin:auto;vertical-align:middle;">
+<p>
+<font style="font-family:Helvetica;font-size:28px;color:white;">Confirm Logout!</font><br><br>
+<font face="Helvetica" color="white" style="font-size:14px;">Do you really want logout?</font><br><br>
+<button id="b1" onclick="logOut()">Yes</button>
+<button id="b2" onclick="goHome()">No</button>
+</p>
+</div>
+</div>
+</div>
+</footer>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
+<script src="/trumbowyg/dist/trumbowyg.min.js"></script>
+<script type="text/javascript">
+$("#funcnav1").click(function(){
+	if($(window).width()>=768)
+	{
+		if($("#div2").width()==250)
+		{
+			$("#pmain").animate({left: "0px",}, 400 );
+		}
+		else
+		{
+			$( "#pmain" ).animate({left: "200px",}, 400 );
+		}
+	}
+});
+$("#funcnav2").click(function(){
+	if($(window).width()>=768)
+	{
+		if($("#div2").width()==250)
+		{
+			$("#pmain").animate({left: "0px",}, 400 );
+		}
+		else
+		{
+			$( "#pmain" ).animate({left: "200px",}, 400 );
+		}
+	}
+});
+$('#trumbowyg-demo').trumbowyg({
+	removeformatPasted: true
+});
+$('#trumbowyg-demo').removeAttr("style");
+</script>
+<script>
+function funcNav()
+{
+	var div2=document.getElementById('div2');
+	if($(window).width()<768)
+	{
+		document.getElementById('div2-wrapper').classList.toggle("hidden-xs");
+		document.getElementById('div2-wrapper').classList.toggle("col-xs-10");
+		if(div2.style.width=="250px")
+		{
+			div2.style.width="50px";
+		}
+		else
+		{
+			div2.style.width="250px"; 	
+		} 	
+	}
+	else
+	{
+		if(div2.style.width=="250px")
+		{
+			div2.style.width="50px";
+		}
+		else
+		{
+			div2.style.width="250px"; 	
+		}
+	}
+}
+function changeState()
+{
+	var div6=document.getElementById('div6');
+	if(parseInt(div6.style.width)==0||div6.style.width==0)
+	{
+		div6.style.width="100%";
+		div6.style.height="100vh";
+	}
+}
+function noChangeDe()
+{
+	var div6=document.getElementById('divde6');
+	div6.style.width=0;
+	div6.style.height=0;
+}
+function noChangeAc()
+{
+	var div6=document.getElementById('divac6');
+	div6.style.width=0;
+	div6.style.height=0;
+}
+function noChange()
+{
+	var div6=document.getElementById('div6');
+	div6.style.width=0;
+	div6.style.height=0;
+}
+function backAdd()
+{
+	var div6=document.getElementById('divx6');
+	div6.style.width=0;
+	div6.style.height=0;
+}
+function anime()
+{
+	if(event.target==document.getElementById('b3'))
+		return;
+	document.getElementById("divx7").style.animationPlayState = "running";
+	setTimeout(function(){ document.getElementById("divx7").style.animationPlayState = "paused"; }, 820);
+}
+function anim()
+{
+	if(event.target==document.getElementById('b3')||event.target==document.getElementById('b4'))
+		return;
+	document.getElementById("div7").style.animationPlayState = "running";
+	setTimeout(function(){ document.getElementById("div7").style.animationPlayState = "paused"; }, 820);
+}
+function animde()
+{
+	if(event.target==document.getElementById('b3')||event.target==document.getElementById('b4'))
+		return;
+	document.getElementById("divde7").style.animationPlayState = "running";
+	setTimeout(function(){ document.getElementById("divde7").style.animationPlayState = "paused"; }, 820);
+}
+function animac()
+{
+	if(event.target==document.getElementById('b3')||event.target==document.getElementById('b4'))
+		return;
+	document.getElementById("divac7").style.animationPlayState = "running";
+	setTimeout(function(){ document.getElementById("divac7").style.animationPlayState = "paused"; }, 820);
+}
+function logOut()
+{
+	var div3=document.getElementById('div3');
+	if(parseInt(div3.style.width)==0||div3.style.width==0)
+	{
+		div3.style.width="100%";
+		div3.style.height="100vh";
+	}
+	else
+	{
+		var xhttp= new XMLHttpRequest();
+		xhttp.open("GET","/logout");
+		xhttp.send();
+		xhttp.onload=function(){
+			location.href="/";
+		}
+	}
+}
+function goHome()
+{
+	var div3=document.getElementById('div3');
+	div3.style.width=0;
+	div3.style.height=0;
+}
+function chState()
+{
+	location.href='/admin/switchAsUser';
+}
+function ani()
+{
+	if(event.target==document.getElementById('b2')||event.target==document.getElementById('b1'))
+		return;
+	document.getElementById("div4").style.animationPlayState = "running";
+	setTimeout(function(){ document.getElementById("div4").style.animationPlayState = "paused"; }, 820);
+}
+var flag;
+if($(window).innerWidth()<=767)
+	flag=0;
+else
+	flag=1;
+$(window).resize(()=>{
+	console.log(flag);
+	if($(window).innerWidth()<=767&&flag==1)
+	{
+		if($("#pmain").position().left!=0)
+			$("#pmain").animate({left: "0px",}, 400 );
+		if(document.getElementById("div2").style.width=="250px")
+		{
+			document.getElementById('div2-wrapper').classList.toggle("hidden-xs");
+			document.getElementById('div2-wrapper').classList.toggle("col-xs-10");
+		}
+		flag=0;
+	}
+	else if($(window).innerWidth()>767&&flag==0)
+	{
+		if(document.getElementById("div2").style.width=="250px")
+			$("#pmain").animate({left: "200px",}, 400 );
+		flag=1;
+	}
+});
+</script>

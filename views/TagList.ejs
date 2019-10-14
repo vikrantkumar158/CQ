@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CQ</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="/DataTables.css">
+<style>
+*{
+	box-sizing: border-box;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+}
+#pmain{
+	position: fixed;
+	left: 0;	
+	right:0;
+	top:60px;
+	bottom:0;
+	margin: auto;
+}
+#dataTable{
+	margin: 10px;
+}
+@media (min-width: 768px){
+	#dataTable{
+		margin-left: 60px;
+	}
+}
+.FilterBar{
+	border-radius: 4px;
+	font-size: 14px;
+	height: 34px;
+	padding: 6px 12px;
+	font-weight: bold;
+	border: 2px solid #2D312C;
+    background-color: #2D312C;
+    color: #fff;
+}
+@media (min-width: 768px)
+{
+	.FilterBar{
+		float:right;
+		margin-right: 10px;
+	}
+}
+@media (max-width: 767px)
+{
+	.FilterBar{
+		margin-top: 10px;
+	}
+	.PFil{
+		display: flex;
+		justify-content: space-evenly;
+	}
+}
+#example_wrapper div{
+	margin-top: 25px;
+	margin-bottom: 10px;
+}
+#example_length{
+	font-size: 14px;
+}
+#example_length select{
+	width:75px;
+	display: inline-block;
+	vertical-align: middle;
+	height: 30px;
+	line-height: 30px;
+	padding: 5px 10px;
+	font-size: 12px;
+	border-radius: 3px;
+	color: #555;
+    background-color: #fff;
+}
+#example_filter{
+	font-size: 14px;
+}
+#example_filter input{
+	height: 30px;
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+	color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+}
+#example{
+	position: relative;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+	font-weight: 500;
+	border: 1px solid #ddd;
+	border-bottom: 1px solid black;
+}
+#example td,th{
+	vertical-align: top;
+	white-space: nowrap;
+	border: 1px solid #ddd;
+}
+.actionbtns{
+	display: inline-block;
+	padding:5px 0px 5px 10px;
+	line-height: 1.5;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+}
+</style>
+</head>
+<body>
+<% include partials/navbar %>
+<div id="pmain" >
+<div id="dataTable">
+<div class="PFil">
+<div style="position: sticky;width: 100%;">
+<div class="FilterBar col-xs-5 col-sm-2" id="UserList" style="float: left;"><center>Tag List</center></div>
+<button onclick="refresh()" class="FilterBar col-xs-offset-2 col-xs-5 col-sm-offset-0 col-sm-2" style="float:right;background-color:#2D312C;color:#fff;cursor:pointer;">
+<span class="fa fa-refresh" style="font-size:14px;"></span>Refresh
+</button>
+</div>
+</div>
+<div style="overflow: scroll;width:100%;">
+<table id="example" class="display" style="width:100%">
+        <thead style="">
+            <tr>
+                <th style="width:180px;border-bottom:2px solid #ddd;">Tag Name</th>
+                <th style="width:197px;border-bottom:2px solid #ddd;">Created By</th>
+                <th style="width:349px;border-bottom:2px solid #ddd;">Create Date</th>
+                <th style="width:110px;border-bottom:2px solid #ddd;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+			<% tag.forEach(function(obj){ %>
+            <tr>
+                <td><%= obj.tagName %></td>
+                <td><%= obj.createdBy %></td>
+				<td><%= obj.createDate %></td>
+                <td>
+				<center>
+				<a class="actionbtns" style="background-color:#2D312C;" onclick="deleteTag(this)"><span class="fa fa-trash" style="color:white;font-size:12px;"></span></a>
+				</center>
+				</td>
+            </tr>
+			<%})%>
+        </tbody>
+    </table>
+	</div>
+	</div>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#example').DataTable({"aoColumnDefs": [{ 'bSortable': false, 'aTargets': [3] }],});
+});
+</script>
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script>
+document.getElementsByClassName('anc')[4].classList.add('active');
+document.getElementsByClassName('fa-tags')[0].classList.add('act');
+function refresh()
+{
+	location.href='/tag/tagslist';
+}
+function deleteTag(elem)
+{
+	var request=new XMLHttpRequest();
+	request.open("DELETE","/deleteTag");
+	request.setRequestHeader("Content-Type", "application/json");
+	request.send(JSON.stringify({'tagName': elem.parentNode.parentNode.parentNode.cells[0].innerHTML}));
+	refresh();
+}
+</script>
+</html>

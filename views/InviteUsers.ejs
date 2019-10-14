@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CQ</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+*{
+	box-sizing: border-box;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+}
+html{
+	height:100%;
+	overflow:auto;
+}
+::-webkit-scrollbar {
+    display:none;
+}
+body{
+	height:100%;
+	margin: 0;
+	padding: 0;
+	line-height: 1.42857143;
+	background-color: #f1f3f3;
+}
+#pmain{
+	position: fixed;
+	left:0px;
+	right:0;
+	top:60px;
+	bottom:0;
+	margin: auto;
+	overflow: auto;
+}
+.btn{
+	color:white;
+	display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+	border: 1px solid white; 
+}
+.community-head-btn{
+	border-bottom: 4px solid white;
+}
+.dropDown{
+	position:relative;
+}
+.dDown{
+	display:inline-block;
+	float:right;
+	background-color:#fff;
+	padding:6px 12px;
+	border:2px solid #d1cfcf;
+	cursor:pointer;
+}
+.dCon{
+    z-index:2;
+	position: absolute;
+	top:46px;
+	right:15px;
+	float:left;
+	display:none;
+	white-space:nowrap;
+	overflow:hidden;
+	background-color:#fff;
+	padding:5px 0;border: 2px solid rgba(119, 159, 255, 0.56);
+}
+.dropDown:hover .dCon{
+	display:inline-block;
+}
+.a1:hover{
+    color:#1C73DD;
+    font-weight:bold;
+}
+.divumr{
+    display:inline-block;
+    margin-top:5px;padding:0px 15px;
+    border-bottom:1px solid #ccc;
+    border-top:1px solid #ccc;
+    width:100%;
+}    
+.divumr:hover{
+    border-bottom:1px solid black;
+    border-top:1px solid black;
+}
+#username{
+    padding: 6px;
+    border: none;
+    margin-top: 8px;
+    margin-right: 16px;
+    font-size: 17px;
+    border: 1px solid #ccc;
+    width: 100%;input file onupload
+}
+#userfile{
+    padding: 6px;
+    border: none;
+    margin-top: 8px;
+    margin-right: 16px;
+    font-size: 17px;
+    border: 1px solid #ccc;
+    width: 100%;
+}
+text{
+    font-size:16px;
+    font-weight:bold;
+}
+@media (min-width: 768px){
+    text{
+        float: right;
+    }
+}
+</style>
+</head>
+<body onload="getUsers('')">
+<% if(role1=='UAdmin'||role1=='USuperadmin'){ %>
+<% include partials/navbar1 %>
+<% } %>
+<% if(role1=='User'||role1=='Community Builder'){ %>
+<% include partials/navbar2 %>
+<% } %>
+<input id="CinName" value="<%= community[0]._id %>" style="display:none;">
+<div id="pmain" class="row">
+<div style="padding: 0;" class="col-xs-12">
+<div style="width:100%;background-image: linear-gradient(to bottom, #4ba2b7, #42a6be, #38aac6, #29adcd, #0fb1d5);padding:6px 0px 0px;display:block;height:50px;">
+</div>
+<div class="container col-xs-11">
+<div class="col-xs-12 col-sm-offset-1 col-sm-2">
+<a href="/community/discussion/<%= community[0]._id %>">
+<img src="/image/<%= community[0].picId %>" style="width:100px;height:100px;box-shadow: 0 0 10px rgba(0,0,0,0.5);margin-top:-40px;border:4px solid #fff;" class="center-block">
+</a>
+</div>
+<div class="col-xs-6 col-sm-7" style="display:inline-block;margin-top:15px;padding:0 15px;color:#337AB7;height:60px;font-size:20px;float:left;font-weight:600;">
+<%= community[0].name %>
+</div>
+<div class="dropDown col-xs-6 col-sm-2" style="display:inline-block;float:right;padding: 15px;z-index: 10;">
+<div class="dDown">
+<i class="fa fa-bars" style="padding:0;font-size:16px;"></i>
+</div>
+<div class="dCon">
+<a href="/community/discussion/<%= community[0]._id %>" style="display:inline-block;padding:3px 20px;text-decoration:none;color:#333333;">Discussion</a><br>
+<a href="/community/managecommunity/<%= community[0]._id %>" style="display:inline-block;padding:3px 20px;text-decoration:none;color:#333333;">Manage Community</a><br>
+<a href="/community/communityprofile/<%= community[0]._id %>" style="display:inline-block;padding:3px 20px;text-decoration:none;color:#333333;">Community Profile</a><br>
+<a href="/community/communitymembers/<%= community[0]._id %>" style="display:inline-block;padding:3px 20px;text-decoration:none;color:#333333;">Community Members</a><br>
+</div>
+</div>
+</div>
+<center>
+    <hr style="border-top:2px solid #E6E6E6;width:85%;margin-top:0">
+</center>
+<div class="container col-xs-12 col-sm-offset-1 col-sm-10">
+<div class="col-xs-12 col-md-12" style="padding-bottom:5px;border-bottom:1px solid #c4c4c4">
+<a class="col-xs-12 col-sm-6" style="font-size:16px;font-weight:bold;" href="/community/managecommunity/<%= community[0]._id %>">Manage Community</a>
+<a class="col-xs-12 col-sm-3 col-md-2" style="float:right;color:#6f6e6e;cursor:context-menu;text-decoration:none;" ><text>Invite Users</text></a>
+<a class="col-xs-12  col-sm-3 col-md-4" style="float:right;" href="/community/editcommunity/<%= community[0]._id %>"><text>Edit Community</text></a>
+</div>
+<div class="col-sm-12" style="width:100%;display:inline-block;">
+<div class="col-sm-5 col-xs-12" style="padding-top:10px;">
+<div class="panel-body allSidesSoft" style="width:100%;display:inline-block;background:#fff;">
+<h4>Search Here:</h4>
+<input type="text" id="username" placeholder="Enter username">
+<% if(role1=='UAdmin'||role1=='USuperadmin'){ %>
+<center><h4>OR</h4></center>
+<input type="file" id="userfile" placeholder="Upload a file" accept=".csv">
+<% } %>
+</div>
+</div>
+<div id="manageHere" class="col-sm-7 col-xs-12" style="padding-top:10px;padding-bottom:10px;">
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script>
+var ul=[];
+document.getElementsByClassName('anc')[1].classList.add('active');
+document.getElementsByClassName('fa-users')[0].classList.add('act');
+document.getElementById('username').oninput=caller;
+function caller()
+{
+	var s=document.getElementById('username').value;
+	s=s.replace(/\s/g,"");
+	getUsers(s);
+}
+function getUsers(s)
+{
+    var xhttp=new XMLHttpRequest();
+    xhttp.open("POST","/getInviteList/"+document.getElementById('CinName').value);
+    xhttp.setRequestHeader("Content-Type","application/json");
+    xhttp.send(JSON.stringify({
+    	'search':s,
+    }));
+    xhttp.onload=()=>{
+    	var data=JSON.parse(xhttp.responseText);
+    	$('#manageHere').empty()
+    	for(var i=0;i<data.length;++i)
+    	{
+            if(s=='')
+                ul.push(data[i].email);
+    		var x='<div class="col-xs-12" id="parent'+data[i]._id+'" style="padding:0;border-top:1px solid #cccccc;border-bottom:1px solid #cccccc;">';
+    		x+='<div style="margin:5px 0px 0px;padding:0px 15px;"></div>';
+			x+='<div style="display:inline-block;vertical-align:top;padding:10px;">';
+			x+='<a href="/viewprofile/'+data[i]._id+'"><img src="/image/'+data[i].picId+'" style="width:50px;height:50px;box-shadow: 0 0 10px rgba(0,0,0,0.5);"></a></div>';
+			x+='<div style="display:inline-block;padding:25px 15px 5px;">';
+			x+='<a href="/viewprofile/'+data[i]._id+'"  style="text-decoration:none;color:#337AB7;font-weight:bold;">'+data[i].name+'</a></div>';
+			x+='<div style="display:inline-block;padding:18px 0px 5px;float:right;">';
+			x+='<button onclick="invite(this)"  id="'+data[i]._id+'" type="button" class="btn btn-success">Invite</button>';
+			x+='</div></div></div>';
+			$('#manageHere').append(x);
+    	}
+    }
+}
+function invite(elem)
+{
+	var xhttp=new XMLHttpRequest();
+	xhttp.open("PUT","/invite/"+document.getElementById('CinName').value+"/"+elem.id);
+    xhttp.setRequestHeader("Content-Type","application/json");
+    xhttp.send();
+    xhttp.onload=()=>{
+    	document.getElementById('parent'+elem.id).remove();
+    }
+}
+document.getElementById('userfile').onchange=()=>{
+    readTextFile();
+}
+function readTextFile()
+{
+    var reader = new FileReader();
+    reader.onload=()=>{
+        document.getElementById('userfile').value="";
+        console.log(reader.result);
+        var arr=reader.result.split("\n");
+        arr.pop();
+        var head=arr[0].split(',');
+        var pos=-1;
+        for(var i=0;i<head.length;++i)
+        {
+            if(head[i].toLowerCase()=="email")
+            {
+                pos=i;
+                break;
+            }
+        }
+        if(pos!=-1)
+        {
+            console.log(ul);
+            for(var i=1;i<arr.length;++i)
+            {
+                var obj=arr[i].split(',');
+                if(!ul.includes(obj[pos]))
+                {
+                    continue;
+                }
+                var xhttp=new XMLHttpRequest();
+                xhttp.open("PUT","/CSVInvite/"+document.getElementById('CinName').value+"/"+obj[pos]);
+                xhttp.setRequestHeader("Content-Type","application/json");
+                xhttp.send();
+                xhttp.onload=()=>{
+                    ul.push(obj[pos]);
+                    caller();
+                }
+            }
+        }
+    }
+    reader.readAsBinaryString(document.getElementById('userfile').files[0]);
+}
+</script>
+</html>

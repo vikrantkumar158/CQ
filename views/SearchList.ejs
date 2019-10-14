@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CQ</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+*{
+	box-sizing: border-box;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+}
+html{
+	height:100%;
+	overflow:auto;
+}
+::-webkit-scrollbar {
+    display:none;
+}
+body{
+	height:100%;
+	margin: 0;
+	padding: 0;
+	line-height: 1.42857143;
+	background-color: #f1f3f3;
+}
+#pmain{
+	position: fixed;
+	left:0px;
+	right:0;
+	top:60px;
+	bottom:0;
+	margin: auto;
+	overflow: auto;
+}
+.btn{
+	color:white;
+	display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+	border: 1px solid white; 
+}
+.community-head-btn{
+	border-bottom: 4px solid white;
+}
+</style>
+</head>
+<body onload="loadComm()">
+<% if(role=='UAdmin'||role=='USuperadmin'){ %>
+<% include partials/navbar1 %>
+<% } %>
+<% if(role=='User'||role=='Community Builder'){ %>
+<% include partials/navbar2 %>
+<% } %>
+<div id="pmain" class="row">
+	<div style="padding: 0;" class="col-sm-12">
+<div style="width:100%;background-image: linear-gradient(to bottom, #4ba2b7, #42a6be, #38aac6, #29adcd, #0fb1d5);padding:6px 0px 0px;display:block;height:50px;">
+<a class="btn col-xs-offset-1" href="/community/communityPanel" style="border-radius:0;float: left;"><i class="fa fa-users" style="padding:0px;font-size:14px;"></i></a>
+<a class="btn community-head-btn" href="/community/list" style="margin:0px 0px 0px 10px;border-radius:0;float: left;"><i class="fa fa-search" style="padding:0px;font-size:14px;"></i></a>
+<div style="width: 33.33%;float: right;padding:0px 15px;">
+<input type="text" placeholder="Search Community..." style="width:100%;height:34px;padding:6px 12px;background-color: #fff;border: 1px solid #ccc;border-radius: 4px;" id="searchIt">
+</div>
+</div>
+<div class="container col-xs-12 col-sm-offset-1 col-sm-10" id="searchList">
+<br>
+</div>
+</div>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script>
+var skip=0,diff=0,lim=Math.ceil(($("#pmain").height()-66)/180);
+document.getElementsByClassName('anc')[1].classList.add('active');
+document.getElementsByClassName('fa-users')[0].classList.add('act');
+var x=document.getElementById('searchIt');
+document.getElementsByTagName("body")[0].onresize=()=>{
+	var num1=($("#pmain").height()-66);
+var num2=document.getElementById('searchList').firstElementChild.nextSibling.nextSibling.offsetHeight+20;
+	diff=lim;
+	lim=(Math.ceil(num1/num2));
+	if(lim>diff)
+		loadComm();
+	else
+		lim=diff;
+}
+document.getElementById('pmain').onscroll=()=>{
+	var h1=document.getElementById('pmain').offsetHeight;
+	var h2=document.getElementById('pmain').firstElementChild.offsetHeight;
+	console.log(h2)
+	console.log(h1)
+	console.log(Math.ceil($('#pmain').scrollTop()))
+	if(h2-h1==Math.ceil($('#pmain').scrollTop()))
+		loadComm();
+}
+function djoin(elem)
+{
+	var name=elem.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('a')[0].id;
+	var xhttp=new XMLHttpRequest();
+	xhttp.open('PUT','/directJoin');
+ 	xhttp.setRequestHeader('Content-Type','application/json');
+	xhttp.send(JSON.stringify({'cname':name}));
+	xhttp.onload=function(){
+		location.reload(true);
+	}
+}
+function ajoin(elem)
+{
+	var name=elem.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('a')[0].id;
+    console.log(name);
+	var xhttp=new XMLHttpRequest();
+	xhttp.open('PUT','/indirectJoin');
+ 	xhttp.setRequestHeader('Content-Type','application/json');
+	xhttp.send(JSON.stringify({'cname':name}));
+	xhttp.onload=function(){
+		location.reload(true);
+	}
+}
+function loadComm()
+{
+	var value=x.value;
+	var xhttp=new XMLHttpRequest();
+	xhttp.open("POST","/getComm");
+	xhttp.setRequestHeader("Content-Type","application/json");
+	xhttp.send(JSON.stringify({
+		'search_value':value,
+		'limit':lim-diff,
+		'skip':skip
+	}));
+	xhttp.onload=function()
+	{
+		var data=JSON.parse(xhttp.responseText);
+		if(data.length!=0)
+		{
+			for(i=0;i<data.length;++i)
+			{
+				var x='<div style="background-color:white;width:100%;display:inline-block;box-shadow:0 3px 10px 0 rgba(115,143,147,.3);margin-bottom: 20px;background-color:#fff;border:1px solid transparent;">';
+				x+='<div style="padding-top:20px;">';
+				x+='<div class="col-xs-12 col-sm-2">';
+				x+='<img src="/image/'+data[i].picId+'" style="height:70px;width:70px;border: 3px solid rgb(235,235,235);box-shadow: 0 0 10px rgba(0,0,0,0.6);">';
+				x+='</div><div class="col-xs-6 col-sm-8" style="padding:15px;">';
+				x+='<a id="'+data[i]._id+'" class="linkToCom" href="/community/communityprofile/'+data[i]._id+'" style="display:inline-block;padding-top:12px;;font-size:17px;font-weight:600;">'+data[i].name+'</a></div>';
+				x+='<div class="col-xs-6 col-sm-2"style="padding:15px">';
+				if(data[i].membershipRule=="Direct")
+					x+='<button class="btn btn-primary" style="float:right;" onclick="djoin(this)">Join</button>';
+				else
+					x+='<button class="btn btn-primary" style="float:right;" onclick="ajoin(this)">Ask To Join</button>';
+				x+='</div></div><div style="width:100%;padding:10px 0px 10px 15px;display:inline-block;">';
+				x+='<p style="margin: 0;font-weight: 600;color: #7D7D7D;">'+(data[i].members.length+1)+' Members</p><p style="font-size: 16px;color: #000;margin: 0;">'+data[i].description+'</p></div></div>';
+				$('#searchList').append(x);
+			}
+			skip+=data.length;
+			diff=0;
+		 }
+	}
+}			
+document.getElementById('searchIt').oninput=()=>{
+	$('#searchList').empty();
+	$('#searchList').append('<br>');
+	skip=0;
+	loadComm();
+}						   
+</script>
+</html>
+

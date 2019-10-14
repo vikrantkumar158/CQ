@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CQ</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/trumbowyg/dist/ui/trumbowyg.min.css">
+<style>
+*{
+	box-sizing: border-box;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+}
+html{
+	height:100%;
+	overflow:auto;
+}
+::-webkit-scrollbar {
+    display:none;
+}
+body{
+	height:100%;
+	margin: 0;
+	padding: 0;
+	line-height: 1.42857143;
+	background-color: #f1f3f3;
+}
+#pmain{
+	z-index: 18;
+	position: fixed;
+	left:50px;
+	right:0;
+	top:60px;
+	bottom:0;
+	margin: auto;
+	overflow: auto;
+}
+.btn{
+	color:white;
+	display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+	border: 1px solid white; 
+}
+.community-head-btn{
+	border-bottom: 4px solid white;
+}
+#addCommName{
+	width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+</style>
+</head>
+<body>
+<% if(role=='UAdmin'||role=='USuperadmin'){ %>
+<% include partials/navbar1 %>
+<% } %>
+<% if(role=='Community Builder'){ %>
+<% include partials/navbar2 %>
+<% } %>
+<div id="pmain" >
+<div style="width:100%;background-image: linear-gradient(to bottom, #4ba2b7, #42a6be, #38aac6, #29adcd, #0fb1d5);padding:6px 0px 0px;display:block;height:50px;">
+<a class="btn community-head-btn" href="/community/communityPanel" style="margin:0px 0px 0px 100px;border-radius:0;"><i class="fa fa-users" style="padding:0px;font-size:14px;"></i></a>
+<a class="btn" href="/community/list" style="margin:0px 0px 0px 10px;border-radius:0;"><i class="fa fa-search" style="padding:0px;font-size:14px;"></i></a>
+</div>
+<div style="margin:0 4%;">
+<div style="display:inline-block;width:100%;padding:0px 15px;float:left;">
+<div style="width:50%;padding:0px 15px;margin:auto;">
+<h3 style="padding-bottom:9px;margin:40px 0 20px;border-bottom:1px solid #eee;color:#707070;">Create Community</h3>
+<div id="comSuc" style="color:#31708f;background-color:#d9edf7;border-color:#bce8f1;padding:15px;margin-bottom:20px;border:1px solid transparent;border-radius:4px;display:none;">
+<strong id="comSucStr"></strong>
+</div>
+<form action="/addComm" method="POST" enctype="multipart/form-data">
+<div style="margin:0px -15px 15px;">
+<input id="addCommName" name="name" placeholder="Name" required>
+</div>
+<div style="margin:0px -15px 15px;">
+<label style="color:#707070;font-weight:700;margin:0px 0px 5px;">Description</label>
+<div id="trumbowyg" name="description" style="padding:0px 5px;background-color:#ECF0F1;"></div>
+</div>
+<div style="margin:0px -15px 15px;">
+<label style="color:#707070;margin-bottom:5px;font-weight:700;">Rule : </label>
+<input type="radio" name="method" value="Direct" style="position:absolute;margin:4px 0px 0px;" checked>&nbsp;&nbsp;&nbsp;&nbsp;Direct
+&nbsp;&nbsp;<input type="radio" name="method" value="Permission" style="position:absolute;margin:4px 0px 0px 10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Permission
+</div>
+<div style="display:inline-block;margin:0px 0px 30px;">
+<div style="display:inline-block;width:25%;float:left;">
+<span id="imgBut" style="cursor:pointer;white-space:nowrap;padding:6px 12px;color:#fff;background-color:#f0ad4e;border:1px solid transparent;border-color:#eea236;">Upload Image</span>
+</div>
+<div style="display:inline-block;width:75%;float:right;padding:0px 15px;">
+<p id="imgPathName" align="center" style="font-size:18px;font-weight:bold;color:#707070;padding:0px 15px;overflow:hidden;white-space:nowrap;"></p>
+</div>
+</div>
+<div style="margin:0px -15px 30px;">
+<input type="submit" style="background-color:#337AB7;width:100%;padding:6px 12px;color:white;border:1px solid transparent;" value="Create Community">	
+</div>
+<input id="imgPath" type="file" name="profilePic" accept="image/*" style="display:none;">
+</form> 
+</div>
+</div>
+</div>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
+<script src="/trumbowyg/dist/trumbowyg.min.js"></script>
+<script type="text/javascript">
+$('#trumbowyg').trumbowyg();
+$('#trumbowyg').removeAttr("style");
+</script>
+<script>
+document.getElementsByClassName('trumbowyg-button-group')[0].style.display='none';
+document.getElementsByClassName('trumbowyg-button-group')[6].style.display='none';
+document.getElementsByClassName('trumbowyg-button-group')[10].style.display='none';
+document.getElementById('imgBut').onclick=function()
+{
+	event.preventDefault();
+	document.getElementById('imgPath').click();
+}
+document.getElementById('imgPath').onchange=function()
+{
+	document.getElementById('imgPathName').innerHTML=document.getElementById('imgPath').files[0].name;
+}
+</script>
+</html>

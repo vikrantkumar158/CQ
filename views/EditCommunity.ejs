@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CQ</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/trumbowyg/dist/ui/trumbowyg.min.css">
+<style>
+*{
+	box-sizing: border-box;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+}
+html{
+	height:100%;
+	overflow:auto;
+}
+::-webkit-scrollbar {
+    display:none;
+}
+body{
+	height:100%;
+	margin: 0;
+	padding: 0;
+	line-height: 1.42857143;
+	background-color: #f1f3f3;
+}
+#pmain{
+	position: fixed;
+	left:0px;
+	right:0;
+	top:60px;
+	bottom:0;
+	margin: auto;
+	overflow: auto;
+}
+#main
+{
+	box-shadow: 0 3px 10px 0 rgba(115,143,147,.3);
+	background-color: #fff;
+	border: 1px solid #eeeeee;
+	border-radius: 2.5px;
+	padding:12.5px;
+	overflow: auto;
+	margin-bottom:4%;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+} 
+#user_img
+{
+	width: 150px;
+	height: 150px;
+	padding: 0.25rem;
+    background-color: #FCFCFC;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+	box-shadow: 0 3px 10px 0 rgba(115,143,147,.3);
+    max-width: 100%;
+}
+.d0{
+	width:100%;
+}
+#cd0{
+	background-color:white;
+	position:absolute;
+	display:table-cell;
+	text-align:center;
+	width:150px;
+	bottom:0px;
+	vertical-align:middle;
+	display:none;opacity:0.5;
+}
+.dropDown{
+	position:relative;
+}
+.dDown{
+	display:inline-block;
+	float:right;
+	background-color:#fff;
+	padding:6px 12px;
+	border:2px solid #d1cfcf;
+	cursor:pointer;
+}
+.dCon{
+    z-index:2;
+	position: absolute;
+	top:46px;
+	right:15px;
+	float:left;
+	display:none;
+	white-space:nowrap;
+	overflow:hidden;
+	background-color:#fff;
+	padding:5px 0;border: 2px solid rgba(119, 159, 255, 0.56);
+}
+.dropDown:hover .dCon{
+	display:inline-block;
+}
+</style>
+</head>
+<body>
+<% if(role=='UAdmin'||role=='USuperadmin'){ %>
+<% include partials/navbar1 %>
+<% } %>
+<% if(role=='User'||role=='Community Builder'){ %>
+<% include partials/navbar2 %>
+<% } %>
+<input id="CinName" value="<%= commdata[0]._id %>" style="display:none;">
+<div id="pmain" class="row">
+<div style="padding: 0;" class="col-xs-12">
+<div style="width:100%;background-image: linear-gradient(to bottom, #4ba2b7, #42a6be, #38aac6, #29adcd, #0fb1d5);padding:6px 0px 0px;display:block;height:50px;">
+</div>
+<div class="container col-xs-11">
+<div class="col-xs-12 col-sm-offset-1 col-sm-2">
+<a href="/community/discussion/<%= commdata[0]._id %>">
+<img src="/image/<%= commdata[0].picId %>" style="width:100px;height:100px;box-shadow: 0 0 10px rgba(0,0,0,0.5);margin-top:-40px;border:4px solid #fff;" class="center-block">
+</a>
+</div>
+<div class="col-xs-6 col-sm-7" style="display:inline-block;margin-top:15px;padding:0 15px;color:#337AB7;height:60px;font-size:20px;float:left;font-weight:600;">
+<%= commdata[0].name %>
+</div>
+<div class="dropDown col-xs-6 col-sm-2" style="display:inline-block;float:right;padding: 15px;z-index: 10;">
+<div class="dDown">
+<i class="fa fa-bars" style="padding:0;font-size:16px;"></i>
+</div>
+<div class="dCon">
+<a href="/community/discussion/<%= commdata[0]._id %>" style="display:inline-block;padding:3px 20px;text-decoration:none;color:#333333;">Discussion</a><br>
+<a href="/community/managecommunity/<%= commdata[0]._id %>" style="display:inline-block;padding:3px 20px;text-decoration:none;color:#333333;">Manage Community</a><br>
+<a href="/community/communityprofile/<%= commdata[0]._id %>" style="display:inline-block;padding:3px 20px;text-decoration:none;color:#333333;">Community Profile</a><br>
+<a href="/community/communitymembers/<%= commdata[0]._id %>" style="display:inline-block;padding:3px 20px;text-decoration:none;color:#333333;">Community Members</a><br>
+</div>
+</div>
+</div>
+<center>
+    <hr style="border-top:2px solid #E6E6E6;width:85%;margin-top:0">
+</center>
+<div id="main" class="col-xs-offset-1 col-xs-10 col-sm-offset-1 col-sm-10">
+<form action="/updateByOwner/<%= commdata[0]._id %>" method="POST" enctype="multipart/form-data">
+<div class="d0" style="position:relative;">
+<div id="i1" style="display:inline-block;">
+<img src="/image/<%= commdata[0].picId %>" id="user_img">
+<div id="cd0" style="cursor:pointer;" onclick="document.getElementById('imgip').click();">
+<img src="/ca.png" style="width:30px;height:30px;">
+<p>Change Photo</p>
+<input id="imgip" type="file" name="profilePic" accept="image/*" style="display:none;"> 
+</div>
+</div>
+</div>
+<br>
+<div class="panel-group" >
+<div class="form-group">
+<label>Community Name :</label>
+<input type="text" value="<%= commdata[0].name %>" class="form-control" name="communityName" maxlength="70" required="">
+</div>
+<div class="form-group">
+<label>Community Rule:</label>
+<select class="form-control" name="communityMembershipRule">
+<option value="Permission" <%= commdata[0].membershipRule=='Direct'?'':'selected' %>>Private</option>
+<option value="Direct" <%= commdata[0].membershipRule=='Direct'?'selected':'' %>>Direct</option>
+</select>
+</div>
+<div class="form-group">
+<label>Community Description:</label>
+<div name="trumbowygbox" id="trumbowyg-demo" style="padding:0px 5px;background-color:#ECF0F1;">
+<%= commdata[0].description %>    
+</div>
+</div>
+<div style="margin-bottom:20px;">
+</div>
+<div>
+<input type="submit" value="Update" style="background-color:#337AB7;padding:6px 12px;margin:1px;color:white;border:1px solid transparent;float:right;">
+</div>
+</div>
+</form>
+</div>
+</div>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="/trumbowyg/dist/trumbowyg.min.js"></script>
+<script>
+$('#trumbowyg-demo').trumbowyg();
+$('#trumbowyg-demo').removeAttr("style");
+$(document).ready(function(){
+    $("#i1").mouseover(function(){
+    	$('#cd0').css('display','block');
+	});
+	$("#i1").mouseout(function(){
+    	$('#cd0').css('display','none');
+    });  
+});
+document.getElementsByClassName('anc')[1].classList.add('active');
+document.getElementsByClassName('fa-users')[0].classList.add('act');
+</script>
+</html>

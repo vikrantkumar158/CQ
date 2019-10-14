@@ -1,0 +1,203 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+*{
+	box-sizing: border-box;
+}
+html{
+	height:100%;
+	overflow:auto;
+}
+::-webkit-scrollbar {
+    display:none;
+}
+body{
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	line-height: 1.42857143;
+	background-color: #f1f3f3;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+}
+.alert-wrappernb{
+	position: absolute;
+	width: 100%;
+}
+.alertnb {
+	display: inline-grid;
+	z-index: 10;
+	position: relative;
+	width: 100%;
+	height: 0px;
+	background-color: #f44336;
+	overflow: hidden;
+	color: white;
+	transition: 0.5s;
+}
+.d1{
+	overflow: hidden;
+	background-color: #222D3C;
+	position: fixed;
+	height: 60px;
+	z-index:1;
+	width: 100%;
+	display: block;
+    padding: 0px 15px;
+}
+.d1 a{
+	float: left;
+	color: #f2f2f2;
+	text-align: center;
+	padding-right: 50px;
+	text-decoration: none;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 20px;
+	font-weight: bold;
+	cursor:pointer;
+}
+.d1{
+	padding-top: 15px;
+	box-sizing: border-box;
+}
+.d1 span{
+	color: white;
+}
+.fa{
+	font-size: 16px;
+	padding-right: 10px;
+}
+.act{
+	color: white;
+}
+.sadmin{
+	float: right;
+	padding: .2em .6em .3em;
+	font-size: 75%;
+	margin-top: 7px;
+    font-weight: 700;
+    line-height: 1;
+	border-radius: 4px;
+}
+.img1{
+	cursor: pointer;
+    width: 40px;
+    margin-left: 30px;
+    margin-right: 10px;
+    float: right;
+    border-radius: 50%;
+}
+.animdiv{
+	position:relative;
+	width:0%;
+	height:0;
+	overflow: hidden;
+	transition-duration: 0.4s;
+    	transition-timing-function: cubic-bezier(0.36, 0.55, 0.19, 1);
+	transition-property: width, height; 
+}
+#div3{
+	z-index:5;
+	background-color: #414F66;
+	opacity:0.95;
+}
+#b1,#b2{
+	background-color:#303F53;
+	color:white;
+	text-shadow:none;
+	padding:10px;
+	min-width:100px;
+	font-size:16px;
+	cursor:pointer;
+	border:0;
+	border-radius:2px;
+	margin-bottom: 4px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+.d4{
+	animation: shake 0.82s infinite;
+	transform: translate3d(0, 0, 0);
+	backface-visibility: hidden;
+	animation-play-state: paused;
+}
+@keyframes shake{
+	0%,%,55%,85% { transform: translate(1px, 0px); }
+	10%,30%,60%,90% { transform: translate(-1px, -0px); }
+	20%,35%,65%,95% { transform: translate(-4px, 0px); }
+	30%,40%,70%,100% { transform: translate(4px, 0px); }
+	40%,45%,75% { transform: translate(-8px, 0px); }
+	50%,50%,80% { transform: translate(8px, 0px); 
+}
+#b1,#b2{
+	animation-play-state: paused;
+}
+</style>
+<div class="alert-wrappernb">
+<div class="alertnb" id="alert1">
+	<center id="alert1Center">
+	</center>
+</div>
+</div>
+<div class="alert-wrappernb">
+<div class="alertnb" id="alert2" style="background-color:#4CAF50">
+	<center id="alert2Center">
+	</center>
+</div>
+</div>
+<div id="div1" class="d1">
+<a href="javascript:window.location.href=window.location.href">cq</a>
+<a onclick="logOut()"><span class="fa"><i class="fa fa-sign-out-alt"></i></span></a>
+<img class="img1 hidden-xs" src="/image/<%= pId %>" style="height: 40px;display: block">
+<% if(data[0].role=='Admin'){ %>
+<span class="sadmin hidden-xs" style="background-color: #5cb85c;margin-left:5px">admin</span>
+<% } %>
+<span class="sadmin" style="background-color: #f0ad4e;"><%= name %></span>
+</div>
+<header>
+<div id="div3" class="animdiv">
+<div id="div4" style="display:table;width:100%;height:100vh;" onclick="ani()" class="d4">
+<div id="div5" style="display:table-cell;text-align:center;margin:auto;vertical-align:middle;">
+<p>
+<font style="font-family:Helvetica;font-size:28px;color:white;">Confirm Logout!</font><br><br>
+<font face="Helvetica" color="white" style="font-size:14px;">Do you really want logout?</font><br><br>
+<button id="b1" onclick="logout()">Yes</button>
+<button id="b2" onclick="goHome()">No</button>
+</p>
+</div>
+</div>
+</div>
+</header>
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+<script>
+function logOut()
+{
+	var div3=document.getElementById('div3');
+	if(parseInt(div3.style.width)==0||div3.style.width==0)
+	{
+		div3.style.width="100%";
+		div3.style.height="100vh";
+	}
+}
+function logout()
+{
+	var xhttp= new XMLHttpRequest();
+	xhttp.open("GET","/logout");
+	xhttp.send();
+	xhttp.onload=function(){
+		location.href="/";
+	}
+}
+function goHome()
+{
+	var div3=document.getElementById('div3');
+	div3.style.width=0;
+	div3.style.height=0;
+}
+function ani()
+{
+	if(event.target==document.getElementById('b2')||event.target==document.getElementById('b1'))
+		return;
+	document.getElementById("div4").style.animationPlayState = "running";
+	setTimeout(function(){ document.getElementById("div4").style.animationPlayState = "paused"; }, 820);
+}
+</script>

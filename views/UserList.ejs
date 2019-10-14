@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CQ</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="/DataTables.css">
+<style>
+*{
+	box-sizing: border-box;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+}
+#pmain{
+	position: fixed;
+	left:0;
+	right:0;
+	top:60px;
+	bottom:0;
+	margin: auto;
+	overflow: auto;
+}
+#dataTable{
+	margin: 10px;
+	overflow: hidden;
+}
+@media (min-width: 768px){
+	#dataTable{
+		margin-left: 60px;
+	}
+}
+.FilterBar{
+	border-radius: 4px;
+	font-size: 14px;
+	height: 34px;
+	padding: 6px 12px;
+	font-weight: bold;
+	border: 2px solid #2D312C;
+    background-color: #2D312C;
+    color: #fff;
+}
+@media (min-width: 768px)
+{
+	.FilterBar{
+		float:right;
+		margin-right: 10px;
+	}
+}
+@media (max-width: 767px)
+{
+	.FilterBar{
+		margin-top: 10px;
+	}
+	.PFil{
+		display: flex;
+		justify-content: space-evenly;
+	}
+}
+#example_wrapper div{
+	margin-top: 25px;
+	margin-bottom: 10px;
+}
+#example_length{
+	font-size: 14px;
+}
+#example_length select{
+	width:75px;
+	display: inline-block;
+	vertical-align: middle;
+	height: 30px;
+	line-height: 30px;
+	padding: 5px 10px;
+	font-size: 12px;
+	border-radius: 3px;
+	color: #555;
+    background-color: #fff;
+}
+#example_filter{
+	font-size: 14px;
+}
+#example_filter input{
+	height: 30px;
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+	color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+}
+#example{
+	position: relative;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+	font-weight: 500;
+	border: 1px solid #ddd;
+	border-bottom: 1px solid black;
+}
+#example td,th{
+	vertical-align: top;
+	white-space: nowrap;
+	border: 1px solid #ddd;
+}
+.actionbtns{
+	display: inline-block;
+	margin:5px;
+	margin-bottom:0;
+	padding:5px 0px 5px 10px;
+	line-height: 1.5;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+}
+</style>
+</head>
+<body>
+<% if(role=='Superadmin'){ %>
+<% include partials/navbar %>
+<% } %>
+<% if(role=='Admin'){ %>
+<% include partials/navbar0 %>
+<% } %>
+<div id="pmain" >
+<div id="dataTable" class="row">
+<div class="PFil">
+<div style="position: sticky;">
+<div class="FilterBar col-xs-5 col-sm-2" id="UserList" style="float: left;"><center>User List</center></div>
+<select class="FilterBar col-xs-offset-2 col-xs-5 col-sm-offset-0 col-sm-2" id="roleFilter">
+<option name="user" value="">All</option>
+<option name="user" value="Admin">Admins</option>
+<option name="admin" value="User">Users</option>
+<option name="commuity manager" value="Community Builder">Community Builder</option>
+</select>
+<select class="FilterBar col-xs-5 col-sm-2" id="statusFilter">
+<option name="user" value="">All</option>
+<option name="pending" value="Pending">Pending</option>
+<option name="confirmed" value="Confirmed">Confirmed</option>
+</select>
+<button onclick="refresh()" class="FilterBar col-xs-offset-2 col-sm-offset-0 col-xs-5 col-sm-2" style="background-color:#2D312C;color:#fff;cursor:pointer;">
+<span class="fa fa-refresh" style="font-size:14px;"></span>Refresh
+</button>
+</div>
+</div>
+<div style="overflow: scroll;width:100%;">
+<table id="example" class="display" style="width: 100%;">
+        <thead style="">
+            <tr>
+                <th style="width:159px;border-bottom:2px solid #ddd;">Username/Email</th>
+                <th style="width:109px;border-bottom:2px solid #ddd;">Phone</th>
+                <th style="width:49px;border-bottom:2px solid #ddd;">City</th>
+                <th style="width:70px;border-bottom:2px solid #ddd;">Status</th>
+                <th style="width:143px;border-bottom:2px solid #ddd;">Role</th>
+                <th style="width:185px;border-bottom:2px solid #ddd;">Actions</th>
+            </tr>
+        </thead>
+    </table>
+    </div>
+	</div>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#example').DataTable({
+		aoColumnDefs : [{ 'bSortable': false, 'aTargets': [1,5] }],
+		searching : true,
+		ordering : true,
+		processing : true,
+		serverSide : true,
+		stateSave : true,
+		ajax : { 
+			url : "/users",
+			type : "POST",
+			data : function(d){
+				d.role=$('#roleFilter').val();
+				d.status=$('#statusFilter').val();
+			}
+		},
+		columns : [
+			{ "data": "email", "name": "email" },
+			{ "data": "phoneno", "name": "phoneno" },
+			{ "data": "city", "name": "city" },
+			{ "data": "status", "name": "status" },
+			{ "data": "role", "name": "role" },
+			{
+				"data": null,
+				render: function(data,type,row){
+					if(data.role=="Superadmin")
+						return '<center><a class="actionbtns" style="background-color:#000000;" onclick="openMail(this)"><span class="fa fa-envelope" style="color:white;font-size:12px;"></span></a></center>'
+					else
+					{
+						var x='<center><a class="actionbtns" style="background-color:#000000;" onclick="openMail(this)"><span class="fa fa-envelope" style="color:white;font-size:12px;"></span></a><a class="actionbtns" style="background-color:#337AB7;" onclick="editDetails(this)"><span class="fa fa-edit" style="color:white;font-size:12px;"></span></a>'
+						if(data.activity=='Active')
+							x=x+'<a class="actionbtns" style="background-color:#F0AD4E;" onclick="deAct(this)"><span class="fa fa-times-circle" style="color:white;font-size:12px;"></span></a></center>'
+						else
+							x=x+'<a class="actionbtns" style="background-color:#5CB85C;" onclick="deAct(this)"><span class="fa fa-check-circle" style="color:white;font-size:12px;"></span></a></center>'
+						return x;
+					}
+				}
+			}
+		],
+		drawCallback : function(settings){
+      		console.log('DataTables has redrawn the table');
+    	}
+	});
+});
+$('#roleFilter').on('change',function(){
+	$('#example').DataTable().draw();
+});
+$('#statusFilter').on('change',function(){
+	$('#example').DataTable().draw();
+});
+</script>
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script>
+var toUpdateUser;
+document.getElementsByClassName('anc')[2].classList.add('active');
+document.getElementsByClassName('fa-list-ul')[0].classList.add('act');
+function refresh()
+{
+	location.href='/admin/userlist';
+}
+function openMail(elem)
+{
+	document.getElementById('email').classList.add("in");
+	document.getElementById('email').style.display="block";
+	document.getElementById('emailid').value=elem.parentNode.parentNode.parentNode.cells[0].innerHTML;
+}
+function editDetails(elem)
+{
+	document.getElementById('emailx1').classList.add("in");
+	document.getElementById('emailx1').style.display="block";
+	toUpdateUser=elem.parentNode.parentNode.parentNode;
+	document.getElementById('emailidx1').value=elem.parentNode.parentNode.parentNode.cells[0].innerHTML;
+	document.getElementById('emailsubx1').value=elem.parentNode.parentNode.parentNode.cells[1].innerHTML;
+	document.getElementById('emailsubx2').value=elem.parentNode.parentNode.parentNode.cells[2].innerHTML;
+	document.getElementById('emailsubx3').value=elem.parentNode.parentNode.parentNode.cells[3].innerHTML;
+	document.getElementById('emailsubx4').value=elem.parentNode.parentNode.parentNode.cells[4].innerHTML;
+	document.getElementById('emailx1Title').innerHTML="Update "+elem.parentNode.parentNode.parentNode.cells[0].innerHTML;
+}
+document.getElementById('email').onclick=function(){
+	if(event.target==document.getElementById('email')||event.target==document.getElementById('emailBor'))
+	{
+		document.getElementById('email').style.display='none';
+		document.getElementById('email').classList.remove('in');
+	}
+	else
+		return;
+}
+document.getElementById('sendMail').onclick=function()
+{
+	var request=new XMLHttpRequest();
+	request.open("POST","/sendMail");
+	request.setRequestHeader("Content-Type", "application/json");
+	request.send(JSON.stringify({
+		'id': document.getElementById('emailid').value,
+		'subject': document.getElementById('emailsub').value,
+		'text': document.getElementById('trumbowyg-demo').innerHTML
+	}));
+	request.onload=function(){
+		document.getElementById('email').style.display='none';
+		document.getElementById('email').classList.remove('in');
+		document.getElementById('trumbowyg-demo').innerHTML="";
+		document.getElementById("alert2Center").innerHTML="Email sent to "+document.getElementById('emailid').value;
+		document.getElementById("alert2").style.height="60px";
+		document.getElementById("alert2").style.padding="20px";
+		setTimeout(function(){
+		document.getElementById("alert2").style.height="0px";
+		document.getElementById("alert2").style.padding="0px";
+		},2000);
+	}
+}
+function updateUser()
+{
+	var request=new XMLHttpRequest();
+	request.open("PUT","/updateUser");
+	request.setRequestHeader("Content-Type", "application/json");
+	request.send(JSON.stringify({
+		'oldUser': toUpdateUser.cells[0].innerHTML, 
+		'email': document.getElementById('emailidx1').value,
+		'phone': document.getElementById('emailsubx1').value,
+		'city': document.getElementById('emailsubx2').value,
+		'status': document.getElementById('emailsubx3').value,
+		'role': document.getElementById('emailsubx4').value
+	}));
+	document.getElementById('emailx1').style.display='none';
+	document.getElementById('emailx1').classList.remove('in');
+	request.onload=function()
+	{
+		$('#example').DataTable().draw();
+		
+		var res=JSON.parse(request.responseText);
+		if(res.length==0)
+		{
+			document.getElementById("alert1Center").innerHTML="Username/Email already in use!!!";
+			document.getElementById("alert1").style.height="60px";
+			document.getElementById("alert1").style.padding="20px";
+			setTimeout(function(){
+			document.getElementById("alert1").style.height="0px";
+			document.getElementById("alert1").style.padding="0px";
+			},2000);
+		}
+		else
+		{
+			document.getElementById("alert2Center").innerHTML="User details updated";
+			document.getElementById("alert2").style.height="60px";
+			document.getElementById("alert2").style.padding="20px";
+			setTimeout(function(){
+			document.getElementById("alert2").style.height="0px";
+			document.getElementById("alert2").style.padding="0px";
+			},2000);
+		}
+	}
+}
+var uname;
+function deAct(elem)
+{
+	uname=elem;
+	if(elem.childNodes[0].classList.contains('fa-times-circle'))
+	{
+		var div6=document.getElementById('divde6');
+		document.getElementById('deUser').innerHTML="Do you want to Deactivate "+elem.parentNode.parentNode.parentNode.cells[0].innerHTML;
+		if(parseInt(div6.style.width)==0||div6.style.width==0)
+		{
+			div6.style.width="100%";
+			div6.style.height="100vh";
+		}
+	}
+	else if(elem.childNodes[0].classList.contains('fa-check-circle'))
+	{
+		var div6=document.getElementById('divac6');
+		document.getElementById('acUser').innerHTML="Do you want to Activate "+elem.parentNode.parentNode.parentNode.cells[0].innerHTML;
+		if(parseInt(div6.style.width)==0||div6.style.width==0)
+		{
+			div6.style.width="100%";
+			div6.style.height="100vh";
+		}
+	}
+}
+function chStateDe()
+{
+	if(uname.childNodes[0].classList.contains('fa-times-circle'))
+	{
+		var xhttp=new XMLHttpRequest();
+		xhttp.open("PUT",'/activation');
+		xhttp.setRequestHeader("Content-Type","application/json");
+		xhttp.send(JSON.stringify({
+			'email': uname.parentNode.parentNode.parentNode.cells[0].innerHTML,
+			'activity': "Inactive"
+		}));
+		uname.childNodes[0].classList.remove('fa-times-circle');
+		uname.childNodes[0].classList.add('fa-check-circle');
+		uname.style.backgroundColor="#5CB85C";
+		var div6=document.getElementById('divde6');
+		div6.style.width=0;
+		div6.style.height=0;
+		document.getElementById("alert2Center").innerHTML="User "+uname.parentNode.parentNode.parentNode.cells[0].innerHTML+" deactivated";
+		document.getElementById("alert2").style.height="60px";
+		document.getElementById("alert2").style.padding="20px";
+		setTimeout(function(){
+		document.getElementById("alert2").style.height="0px";
+		document.getElementById("alert2").style.padding="0px";
+		},2000);
+	}
+	else if(uname.childNodes[0].classList.contains('fa-check-circle'))
+	{
+		var xhttp=new XMLHttpRequest();
+		xhttp.open("PUT",'/activation');
+		xhttp.setRequestHeader("Content-Type","application/json");
+		xhttp.send(JSON.stringify({
+			'email': uname.parentNode.parentNode.parentNode.cells[0].innerHTML,
+			'activity': "Active"
+		}));
+		uname.childNodes[0].classList.remove('fa-check-circle');
+		uname.childNodes[0].classList.add('fa-times-circle');
+		uname.style.backgroundColor="#F0AD4E";
+		var div6=document.getElementById('divac6');
+		div6.style.width=0;
+		div6.style.height=0;
+		document.getElementById("alert2Center").innerHTML="User "+uname.parentNode.parentNode.parentNode.cells[0].innerHTML+" activated";
+		document.getElementById("alert2").style.height="60px";
+		document.getElementById("alert2").style.padding="20px";
+		setTimeout(function(){
+		document.getElementById("alert2").style.height="0px";
+		document.getElementById("alert2").style.padding="0px";
+		},2000);
+	}
+}
+</script>
+</html>

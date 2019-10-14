@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>CQ</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<style>
+*{
+	box-sizing: border-box;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+}
+html{
+	height:100%;
+	overflow:auto;
+}
+::-webkit-scrollbar {
+    display:none;
+}
+body{
+	height:100%;
+	margin: 0;
+	padding: 0;
+	line-height: 1.42857143;
+	background-color: #f1f3f3;
+}
+#pmain{
+	position:fixed;
+	left:0px;
+	right:0;
+	top:60px;
+	bottom:0;
+	margin: auto;
+	overflow: auto;
+}
+#main
+{
+	position: relative;
+	min-height: 1px;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	box-shadow: 0 3px 10px 0 rgba(115,143,147,.3);
+	background-color: #fff;
+	border: 1px solid #eeeeee;
+	border-radius: 2.5px;
+	padding:12.5px;
+	overflow: auto;
+	margin-top:2%; 
+	margin-bottom:4%;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+}
+#user_img
+{
+	width: 150px;
+	height: 150px;
+	padding: 0.25rem;
+    background-color: #FCFCFC;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+	box-shadow: 0 3px 10px 0 rgba(115,143,147,.3);
+    max-width: 100%;
+}
+.d0{
+	width:100%;
+}
+#cd0{
+	background-color:white;
+	position:absolute;
+	display:table-cell;
+	text-align:center;
+	width:150px;
+	bottom:0px;
+	vertical-align:middle;
+	display:none;opacity:0.5;
+}
+</style>
+</head>
+<body>
+<% if(role=='UAdmin'||role=='USuperadmin'){ %>
+<% include partials/navbar1 %>
+<% } %>
+<% if(role=='User'||role=='Community Builder'){ %>
+<% include partials/navbar2 %>
+<% } %>
+<div id="pmain" >
+<div id="main" class="col-xs-12 col-sm-offset-1 col-sm-10">
+<div class="d0" style="position:relative;">
+<div id="i1" style="display:inline-block;">
+<img src="/image/<%= pId %>" alt="broken" id="user_img">
+<div id="cd0" style="cursor:pointer;" onclick="document.getElementById('imgip').click();">
+<img src="ca.png" style="width:30px;height:30px;">
+<p>Change Photo</p>
+</div>
+</div>
+</div>
+<br>
+<form action="/updateProfile" method="POST" enctype="multipart/form-data">
+<input name="profilePic" id="imgip" type="file" accept="image/*" style="display:none;">
+<div style="margin-bottom:20px;">
+<div style="display:inline-block;width:100%;border:1px solid transparent;border-color:#ddd;border-radius:4px;">
+<div style="padding:10px 15px;background-color:#f5f5f5;">Basic Info</div>
+<div style="padding:15px;">
+<div style="margin:0px 0px 15px;">
+<label style="display:inline-block;font-weight:700;margin:0px 0px 5px;">Email :</label>
+<input name="email" type="email" readonly style="padding:6px 12px;width:100%;border-radius:4px;border:1px solid #ccc;background-color:#f5f5f5;cursor:not-allowed;" value="<%= data[0].email %>">
+</div>
+<div style="margin:0px 0px 15px;">
+<label style="display:inline-block;font-weight:700;margin:0px 0px 5px;">Name :</label>
+<input name="name" type="text" style="padding:6px 12px;width:100%;border-radius:4px;border:1px solid #ccc;background-color:#ffffff;" required value="<%= data[0].name %>">
+</div>
+<div style="margin:0px 0px 15px;width:41.67%;float:left;">
+<label style="display:inline-block;font-weight:700;margin:0px 0px 5px;">DOB :</label>
+<input name="date" class="datepicker" placeholder="Not Updated" type="text" style="padding:6px 12px;width:100%;border-radius:4px;border:1px solid #ccc;background-color:#ffffff;" required value="<%= data[0].dob %>">
+</div>
+<div style="position:relative;margin:0px 0px 15px;width:41.67%;float:left;left:16.67%;">
+<label style="display:inline-block;font-weight:700;margin:0px 0px 5px;">Gender </label>
+<select  name="gender" style="padding:6px 12px;width:100%;border-radius:4px;border:1px solid #ccc;background-color:#ffffff;" required>
+<optgroup label="Select Gender">
+<option value="Male" <%= data[0].gender=='Male'?'selected':'' %>>Male</option>
+<option value="Female" <%= data[0].gender=='Female'?'selected':'' %>>Female</option>
+<option value="Transgender" <%= data[0].gender=='Transgender'?'selected':'' %>>Transgender</option>
+</optgroup>
+</select>
+</div>
+</div>
+</div>
+<div style="margin-top:5px;border:1px solid transparent;border-color:#ddd;border-radius:4px;">
+<div style="padding:10px 15px;background-color:#f5f5f5;">Contact Info</div>
+<div style="padding:15px;">
+<div style="margin:0px 0px 15px;">
+<label style="display:inline-block;font-weight:700;margin:0px 0px 5px;">Phone :</label>
+<input name="phone" type="text" maxlength="10" style="padding:6px 12px;width:100%;border-radius:4px;border:1px solid #ccc;background-color:#ffffff;" required value="<%= data[0].phoneno %>">
+</div>
+<div style="margin:0px 0px 15px;">
+<label style="display:inline-block;font-weight:700;margin:0px 0px 5px;">City :</label>
+<input name="city" type="text" style="padding:6px 12px;width:100%;border-radius:4px;border:1px solid #ccc;background-color:#ffffff;" required value="<%= data[0].city %>">
+</div>
+</div>
+</div>
+<div style="margin-top:5px;border:1px solid transparent;border-color:#ddd;border-radius:4px;">
+<div style="padding:10px 15px;background-color:#f5f5f5;">Personal Info</div>
+<div style="padding:15px;">
+<div style="margin:0px 0px 15px;">
+<label style="display:inline-block;font-weight:700;margin:0px 0px 5px;">Interests :</label>
+<input name="PI1" type="text" style="padding:6px 12px;width:100%;border-radius:4px;border:1px solid #ccc;background-color:#ffffff;" value="<%= data[0].PI1 %>">
+</div>
+<div style="margin:0px 0px 15px;">
+<label style="display:inline-block;font-weight:700;margin:0px 0px 5px;">Tell us a bit more about your journey:</label>
+<textarea name="PI2" rows="3" style="padding:6px 12px;width:100%;border-radius:4px;border:1px solid #ccc;background-color:#ffffff;resize:none;"><%= data[0].PI2 %></textarea>
+</div>
+<div style="margin:0px 0px 15px;">
+<label style="display:inline-block;font-weight:700;margin:0px 0px 5px;">What are your expectations from the communities?</label>
+<textarea name="PI3" rows="3" style="padding:6px 12px;width:100%;border-radius:4px;border:1px solid #ccc;background-color:#ffffff;resize:none;"><%= data[0].PI3 %></textarea>
+</div>
+</div>
+</div>
+</div>
+<div>
+<a href="/profile">
+<input type="button" value="Cancel" style="background-color:#D9534F;padding:6px 12px;margin:1px;color:white;border:1px solid transparent;float:right;">
+</a>
+<input type="submit" value="Update" style="background-color:#337AB7;padding:6px 12px;margin:1px;color:white;border:1px solid transparent;float:right;">
+<a href="/changePassword">
+<input type="button" value="Change Password" style="background-color:#F0AD4E;padding:6px 12px;margin:1px;color:white;border:1px solid transparent;">
+</a>
+</div>
+</form>
+</div>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript">
+$( function() {
+	$( ".datepicker" ).datepicker({dateFormat: 'dd/mm/yy'});
+});
+$(document).ready(function(){
+    $("#i1").mouseover(function(){
+    	$('#cd0').css('display','block');
+	});
+	$("#i1").mouseout(function(){
+    	$('#cd0').css('display','none');
+    });  
+});
+</script>
+<script>
+document.getElementsByClassName('anc')[0].classList.add('active');
+document.getElementsByClassName('fa-user')[0].classList.add('act');	
+</script>
+</html>

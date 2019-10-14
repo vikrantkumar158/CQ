@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CQ</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<style>
+*{
+	box-sizing: border-box;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+}
+.alertua{
+	width: 30%;
+	margin: auto;
+	padding: 20px;
+	background-color: #4CAF50;
+	color: white;
+	opacity: 1;
+	transition: opacity 0.6s;
+	margin-top: 15px;
+	margin-bottom: 15px;
+	display: none;
+}
+.alert1{
+	width: 30%;
+	margin: auto;
+	padding: 20px;
+	background-color: #4CAF50;
+	color: white;
+	opacity: 1;
+	transition: opacity 0.6s;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+.closebtn{
+	margin-left: 15px;
+	color: white;
+	font-weight: bold;
+	float: right;
+	font-size: 22px;
+	line-height: 20px;
+	cursor: pointer;
+	transition: 0.3s;
+}
+.closebtn:hover{
+	color: black;
+}
+#pmain{
+	position: fixed;
+	left:0px;
+	right:0;
+	top:60px;
+	bottom:0;
+	margin: auto;
+	overflow: auto;
+}
+#table1{
+	border:5px solid rgba(0,0,0,0.1);
+	background-color: #fff;
+	margin-top: 40px;
+	margin-bottom: 40px;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-weight: 500;
+    line-height: 1.1;
+}
+.alert-dismissible{
+	padding: 15px;
+	padding-right: 35px;
+	border-radius: 4px;
+	margin-top: 20px;
+}
+.hidden{
+	display: none;
+}
+#h1{
+	font-size: 36px;
+	margin: 35px 0px 6px;
+}
+#button1,#button2{
+	height: 30px;
+	border-radius: 8px;
+	background-color: black;
+	color: white;
+	border:0;
+	font-size:15px;
+}
+.info{
+	display: block;
+	height: 34px;
+	width: 100%;
+	outline: 0;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	background-color: #fff;	
+	color: black;
+	padding: 6px 12px;
+	font-size: 14px;
+}
+#input1{
+	border: 0;
+	height: 30px;
+	min-width: 80px;
+	width: 20%;
+	background-color: #5cb85c;
+	color: white;
+	font-size: 14px;
+}
+#input2{
+	border: 0;
+	height: 30px;
+	min-width: 80px;
+	width: 20%;
+	background-color: #d9534f;
+	color: white;
+	font-size: 14px;
+}
+</style>
+</head>
+<body onload="getUsers()">
+<% if(role=='Superadmin'){ %>
+<% include partials/navbar %>
+<% } %>
+<% if(role=='Admin'){ %>
+<% include partials/navbar0 %>
+<% } %>
+<div id="pmain">
+<div class="alertua" id="alertdiv">
+  <span class="closebtn">&times;</span>  
+  User added successfully
+</div>
+<form id="myForm" onsubmit="subForm()">
+<div bgcolor="white" id="table1" class="col-xs-offset-1 col-xs-10 col-sm-offset-4 col-sm-5">
+<div align="left" id="trhidden" class="hidden">
+<div class="alert-dismissible" style="border: 1px solid rgb(226, 229, 225); display: block;" id="alert-div-avilability">
+<center>
+<label id="availability" style="color: rgb(139, 139, 139);"></label>
+</center>
+</div>
+</div>
+<div style="margin:20px 0px 10px;">
+<p id="h1">Add User</p>
+</div>
+<div style="margin:0px 0px 15px;">
+<input class='info' type='text' placeholder='Name' required>
+<br>
+</div>
+<div  style="margin:0px 0px 15px;">
+<input class='info' type='email' placeholder='Email' required oninput="displayCheck()" onfocus="getUsers()">
+<br>
+</div>
+<div style="margin:0px 0px 15px;">
+<input class='info' type='password' placeholder='User Password' required>
+<br>
+</div>
+<div  style="margin:0px 0px 15px;">
+<input class='info' type='text' placeholder='Phone' maxlength="10" required>
+<br>
+</div>
+<div  style="margin:0px 0px 15px;">
+<input class='info' type='text' placeholder='City' required>
+<br>
+</div>
+<div  style="margin:0px 0px 15px;">
+<p style="font-weight:bold;font-size:14px;margin-bottom:2%;">Role:</p>
+<select class="info" name="role" style="width:100%">
+<optgroup label="Select User Role">
+<option value="User" selected>User</option>
+<option value="Community Builder">Community Builder</option>
+<option value="Admin">Admin</option>
+</optgroup>
+</select>
+<br>
+</div>
+<div  style="margin:0px 0px 15px;">
+<input id='input1' type='submit' value='Add User'>
+<input id='input2' type='button' value='Cancel' onclick="location.href='/admin/profile';">
+</div>
+</div>
+</form>
+<br>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script>
+document.getElementsByClassName('anc')[1].classList.add('active');
+document.getElementsByClassName('fa-plus-square')[0].classList.add('act');
+var input1 = document.getElementById('input1');
+var info = document.getElementsByClassName('info');
+var users;
+function getUsers()
+{
+	var request=new XMLHttpRequest();
+	request.open("GET","/getUsers");
+	request.setRequestHeader("Content-Type", "application/json");
+	request.send();
+	request.onload=function(){
+		users=JSON.parse(request.responseText);
+	}
+}
+function displayCheck()
+{
+	var x=info[1].value,flag;
+	x=x.replace(/\s/g, '');
+	if(x!="")
+	{
+		if(document.getElementById("trhidden").classList.contains('hidden'))
+			document.getElementById("trhidden").classList.remove("hidden");
+		for(var i=0;i<users.length;++i)
+		{
+			flag=0;
+			if(x==users[i].email)
+			{
+				flag=1;
+				break;
+			}
+		}
+		if(flag==1)
+			document.getElementById("availability").innerHTML="User "+x+" already exist";
+		else
+			document.getElementById("availability").innerHTML=x+" is available";
+	}
+	else
+	{
+		document.getElementById("availability").innerHTML="";
+		if(!document.getElementById("trhidden").classList.contains('hidden'))
+			document.getElementById("trhidden").classList.add("hidden");
+	}
+}
+function subForm()
+{
+	event.preventDefault();
+	var request=new XMLHttpRequest();
+	request.open("POST","/addUsers");
+	request.setRequestHeader("Content-Type", "application/json");
+	request.send(JSON.stringify({'name': info[0].value , 'email': info[1].value , 'password': info[2].value , 'phoneno': info[3].value, 'city': info[4].value, 'gender': 'male','dob': '','role': info[5].options[info[5].selectedIndex].text}));
+	request.onload=function(){
+		var data=JSON.parse(request.responseText);
+		if(data.length==0)
+		{
+			var div=document.getElementById("alertdiv");
+			div.classList.remove("alertua");
+			div.classList.add("alert1");
+			div.style.opacity = "1";
+			document.getElementById("myForm").reset();
+			document.getElementById("pmain").scrollTop=0;
+			document.getElementById("availability").innerHTML="";
+			document.getElementById("trhidden").classList.add("hidden");
+		}
+		else
+		{
+			info[1].value="";
+			document.getElementById("availability").innerHTML="";
+			document.getElementById("trhidden").classList.add("hidden");
+			var div6=document.getElementById('divx6');
+			if(parseInt(div6.style.width)==0||div6.style.width==0)
+			{
+				div6.style.width="100%";
+				div6.style.height="100vh";
+			}
+		}
+	}
+}
+document.getElementsByClassName("closebtn")[0].onclick=function()
+{
+	var div = this.parentElement;
+    div.style.opacity = "0";
+    setTimeout(function(){ div.classList.add("alertua"); }, 600);
+	div.classList.remove("alert1");
+}
+</script>
+</html>

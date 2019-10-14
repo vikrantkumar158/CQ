@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CQ</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+*{
+  	box-sizing: border-box;
+  	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  	font-size: 14px;
+}
+html{
+  	height:100%;
+  	overflow:auto;
+}
+::-webkit-scrollbar {
+    display:none;
+}
+body{
+  	height:100%;
+  	margin: 0;
+  	padding: 0;
+  	line-height: 1.42857143;
+  	background-color: #f1f3f3;
+}
+#pmain{
+	position: fixed;
+    left:0px;
+	right:0;
+	top:60px;
+	bottom:0;
+	margin: auto;
+	overflow: auto;
+}
+.contBox{
+    display:flex;
+    align-items: center;
+    border-top:1px solid #cccccc;
+    border-bottom:1px solid #cccccc;
+    padding: 15px;
+}
+@media (max-width: 546px)
+{
+    .contBox{
+        flex-direction: column;
+    }
+}
+.btn{
+    color:white;
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    border: 1px solid white; 
+    border-radius:0;
+}
+.community-head-btn{
+	border-bottom: 4px solid white;
+}
+</style>
+</head>
+<body>
+<% if(role=='UAdmin'||role=='USuperadmin'){ %>
+<% include partials/navbar1 %>
+<% } %>
+<% if(role=='User'||role=='Community Builder'){ %>
+<% include partials/navbar2 %>
+<% } %>
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Community Invitations</h4>
+      </div>
+      <div class="modal-body" style="display: inline-block;width: 100%;">
+       <% community4.forEach(function(obj){ %>
+<div class="col-xs-12" style="margin-top: 5px;">
+<div class="col-xs-12 contBox">  
+<div class="col-xs-12 col-sm-2">
+<a href="/community/communityprofile/<%= obj._id %>"><img src="/image/<%= obj.picId %>" style="width:50px;height:50px;box-shadow: 0 0 10px rgba(0,0,0,0.5);"></a>
+</div>
+<div class="col-xs-12 col-sm-2" >
+<label class="label label-warning">Invited</label>
+</div>
+<div class="col-xs-12 col-sm-2">
+<a href="/community/communityprofile/<%= obj._id %>"  style="text-decoration:none;color:#337AB7;font-weight:bold;"><%= obj.name %></a>
+</div>
+<div class="col-xs-12 col-sm-2">
+<a style="text-decoration:none;color:black;cursor:context-menu">Members(<%= obj.members.length+1 %>)</a>
+</div>
+<div class="col-xs-12 col-sm-offset-1 col-sm-3">
+<button type="button" class="btn btn-success" id="<%= obj._id %>" onclick="acceptInvite(this)" style="float: right;">Accept</button>
+<button type="button" class="btn btn-danger"  id="<%= obj._id %>" onclick="removeInvite(this)" style="float: right;">Reject</button>
+</div>
+</div>
+</div>
+<% }) %>
+<% if(community4.length==0){ %>
+No Pending Invitations
+<% } %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="pmain" class="row">
+<div style="padding: 0;" class="col-xs-12">
+<div class="col-xs-12" style="background-image: linear-gradient(to bottom, #4ba2b7, #42a6be, #38aac6, #29adcd, #0fb1d5);padding:6px 6px 0px 0px;display:block;height:50px;">
+<a class="btn community-head-btn col-xs-offset-1" href="/community/communityPanel"><i class="fa fa-users" style="padding:0px;font-size:14px;"></i></a>
+<a class="btn" href="/community/list" style="margin:0px 0px 0px 10px;border-radius:0;"><i class="fa fa-search" style="padding:0px;font-size:14px;"></i></a>
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" style="float: right;">Notifications</button>
+</div>
+<div class="col-xs-12 col-sm-offset-1 col-sm-10" style="display:inline-block;overflow: scroll;">
+<% if(community4.length!=0){ %>
+<div class="alert alert-info alert-dismissible col-xs-12 col-sm-offset-3 col-sm-6" style="margin-top: 5px;margin-bottom: 5px;">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>Info!</strong> <%= community4.length %> Invitation(s) Pending
+</div>
+<% } %>
+<div style="margin-top:50px;margin-bottom:20px;">
+<div style="display:inline-block;background-image: linear-gradient(to bottom, #4ba2b7, #42a6be, #38aac6, #29adcd, #0fb1d5);overflow:visible;width:100%;padding:10px 15px;">
+<p style="color:white;font-weight:bold;margin-top:6px;margin-bottom:10px;">My Communities</p>
+<% if(role=='UAdmin'||role=='USuperadmin'||role=='Community Builder'){ %>
+<a href="/community/AddCommunity" class="btn btn-info community-panel-btn" style="float:right;margin:-35px 5px 0 0;text-decoration:none;">Create</a>
+<% } %>
+</div>
+<div style="display:inline-block;width:100%;padding:15px;background-color:white;">
+<% community1.forEach(function(obj){ %>
+<div class="col-xs-12" style="margin-top: 5px;">
+<div class="col-xs-12 contBox"> 
+<div class="col-xs-12 col-sm-2 col-md-1">
+<a href="/community/discussion/<%= obj._id %>"><img src="/image/<%= obj.picId %>" style="width:50px;height:50px;box-shadow: 0 0 10px rgba(0,0,0,0.5);"></a>
+</div>
+<div class="col-xs-12 col-sm-2">
+<a href="/community/discussion/<%= obj._id %>"  style="text-decoration:none;color:#337AB7;font-weight:bold;"><%= obj.name %></a>
+</div>
+<div class="col-xs-12 col-sm-2">
+<a href="/community/manageCommunity/<%= obj._id %>" style="text-decoration:none;color:#337AB7;">Request(<%= obj.request.length %>)</a>
+</div>
+<div class="col-xs-12 col-sm-offset-4 col-sm-3">
+<a href="/community/manageCommunity/<%= obj._id %>" style="display:inline-block;text-decoration:none;color:white;background-color:#5cb85c;padding:0px 5px;border-radius:2px;float: right;"><i class="fa fa-cogs" style="font-size:14px;padding:0px;"></i></a>
+</div>
+</div>
+</div>
+<% }) %>
+<% community2.forEach(function(obj){ %>
+<div class="col-xs-12" style="margin-top: 5px;">
+<div class="col-xs-12 contBox"> 
+<div class="col-xs-12 col-sm-2 col-md-1" style="display:inline-block;">
+<a href="/community/discussion/<%= obj._id %>"><img src="/image/<%= obj.picId %>" style="width:50px;height:50px;box-shadow: 0 0 10px rgba(0,0,0,0.5);"></a>
+</div>
+<div class="col-xs-12 col-sm-2" style="display:inline-block;">
+<a href="/community/discussion/<%= obj._id %>"  style="text-decoration:none;color:#337AB7;font-weight:bold;"><%= obj.name %></a>
+</div>
+<div class="col-xs-12 col-sm-2" style="display:inline-block;">
+<a href="/community/communitymembers/<%= obj._id %>" style="text-decoration:none;color:#337AB7;">Members(<%= obj.members.length+1 %>)</a>
+</div>
+<div class="col-xs-12 col-sm-offset-4 col-sm-3">
+</div>
+</div>
+</div>
+<% }) %>
+<% community3.forEach(function(obj){ %>
+<div class="col-xs-12" style="margin-top: 5px;">
+<div class="col-xs-12 contBox">  
+<div class="col-xs-12 col-sm-2 col-md-1" style="display:inline-block;">
+<a href="/community/communityprofile/<%= obj._id %>"><img src="/image/<%= obj.picId %>" style="width:50px;height:50px;box-shadow: 0 0 10px rgba(0,0,0,0.5);"></a>
+</div>
+<div class="col-xs-12 col-sm-2 col-md-1" style="display:inline-block;">
+<label class="label label-danger">Pending</label>
+</div>
+<div class="col-xs-12 col-sm-2" style="display:inline-block;">
+<a href="/community/communityprofile/<%= obj._id %>"  style="text-decoration:none;color:#337AB7;font-weight:bold;"><%= obj.name %></a>
+</div>
+<div class="col-xs-12 col-sm-2" style="display:inline-block;">
+<a style="text-decoration:none;color:#337AB7;cursor:context-menu;">Members(<%= obj.members.length+1 %>)</a>
+</div>
+<div class="col-xs-12 col-sm-offset-1 col-sm-3" style="display:inline-block;">
+<a id="<%= obj._id %>" onclick="removeReq(this)" style="display:inline-block;text-decoration:none;color:white;background-color:#d9534f;padding:0px 5px;border-radius:2px;cursor:pointer;float: right;"><i class="fa fa-times" style="font-size:14px;padding:0px;"></i></a>
+</div>
+</div>
+</div>
+<% }) %>
+<% if(community1.length==0&&community2.length==0&&community3.length==0){ %>
+<div style="margin-top:5px;font-weight: bold;min-height: 20px;padding: 19px;margin-bottom: 20px;background-color: #f5f5f5;border: 1px solid #e3e3e3;border-radius: 4px;">
+<center>No Communities Found</center>
+<br>
+<center><a href="/community/list" style="text-decoration:none;font-weight:500;display:inline-block;padding:6px 12px;background-color:#fff;color:#333;border:1px solid #ccc;">
+Click here for more communities
+</a></center>
+</div>
+<% } %>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script>
+document.getElementsByClassName('anc')[1].classList.add('active');
+document.getElementsByClassName('fa-users')[0].classList.add('act');
+function removeReq(elem)
+{
+    var xhttp=new XMLHttpRequest();
+    xhttp.open('PUT','/removeRequest');
+    xhttp.setRequestHeader('Content-Type','application/json');
+    xhttp.send(JSON.stringify({'id': $(elem).closest('a').attr('id')}));
+    xhttp.onload=function(){
+        location.reload(true);
+    }
+}
+function removeInvite(elem)
+{
+    var xhttp=new XMLHttpRequest();
+    xhttp.open("PUT",'/removeInviteRequest');
+    xhttp.setRequestHeader("Content-Type","application/json");
+    xhttp.send(JSON.stringify({'cid':elem.id}));
+    xhttp.onload=function(){
+        $(elem).parent().parent().parent().remove();
+    }
+}
+function acceptInvite(elem)
+{
+    var xhttp=new XMLHttpRequest();
+    xhttp.open("PUT",'/acceptInvitation');
+    xhttp.setRequestHeader("Content-Type","application/json");
+    xhttp.send(JSON.stringify({'cid':elem.id}));
+    xhttp.onload=function(){
+        $(elem).parent().parent().parent().remove();
+    }
+}
+</script>
+</html>

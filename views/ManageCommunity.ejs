@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CQ</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+*{
+	box-sizing: border-box;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+}
+html{
+	height:100%;
+	overflow:auto;
+}
+::-webkit-scrollbar {
+    display:none;
+}
+body{
+	height:100%;
+	margin: 0;
+	padding: 0;
+	line-height: 1.42857143;
+	background-color: #f1f3f3;
+}
+#pmain{
+	position: fixed;
+	left:0px;
+	right:0;
+	top:60px;
+	bottom:0;
+	margin: auto;
+	overflow: auto;
+}
+.btn{
+	color:white;
+	display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+	border: 1px solid white; 
+}
+.community-head-btn{
+	border-bottom: 4px solid white;
+}
+.dropDown{
+	position:relative;
+}
+.dDown{
+	display:inline-block;
+	float:right;
+	background-color:#fff;
+	padding:6px 12px;
+	border:2px solid #d1cfcf;
+	cursor:pointer;
+}
+.dCon{
+    z-index:2;
+	position: absolute;
+	top:46px;
+	right:15px;
+	float:left;
+	display:none;
+	white-space:nowrap;
+	overflow:hidden;
+	background-color:#fff;
+	padding:5px 0;border: 2px solid rgba(119, 159, 255, 0.56);
+}
+.dropDown:hover .dCon{
+	display:inline-block;
+}
+.a1:hover{
+    color:#1C73DD;
+    font-weight:bold;
+}
+.divumr{
+    display:inline-block;
+    margin-top:5px;padding:0px 15px;
+    border-bottom:1px solid #ccc;
+    border-top:1px solid #ccc;
+    width:100%;
+}    
+.divumr:hover{
+    border-bottom:1px solid black;
+    border-top:1px solid black;
+}
+text{
+    font-size:16px;
+    font-weight:bold;
+}
+@media (min-width: 768px){
+    text{
+        float: right;
+    }
+}
+</style>
+</head>
+<body onload="getUsers()">
+<% if(role1=='UAdmin'||role1=='USuperadmin'){ %>
+<% include partials/navbar1 %>
+<% } %>
+<% if(role1=='User'||role1=='Community Builder'){ %>
+<% include partials/navbar2 %>
+<% } %>
+<input id="CinName" value="<%= community[0]._id %>" style="display:none;">
+<div id="pmain" class="row">
+<div style="padding: 0;" class="col-xs-12">
+<div style="width:100%;background-image: linear-gradient(to bottom, #4ba2b7, #42a6be, #38aac6, #29adcd, #0fb1d5);padding:6px 0px 0px;display:block;height:50px;">
+</div>
+<div class="container col-xs-11">
+<div class="col-xs-12 col-sm-offset-1 col-sm-2">
+<a href="/community/discussion/<%= community[0]._id %>">
+<img src="/image/<%= community[0].picId %>" style="width:100px;height:100px;box-shadow: 0 0 10px rgba(0,0,0,0.5);margin-top:-40px;border:4px solid #fff;" class="center-block">
+</a>
+</div>
+<div class="col-xs-6 col-sm-7" style="display:inline-block;margin-top:15px;padding:0 15px;color:#337AB7;height:60px;font-size:20px;float:left;font-weight:600;">
+<%= community[0].name %>
+</div>
+<div class="dropDown col-xs-6 col-sm-2" style="display:inline-block;float:right;padding: 15px;z-index: 10;">
+<div class="dDown">
+<i class="fa fa-bars" style="padding:0;font-size:16px;"></i>
+</div>
+<div class="dCon">
+<a href="/community/discussion/<%= community[0]._id %>" style="display:inline-block;padding:3px 20px;text-decoration:none;color:#333333;">Discussion</a><br>
+<a href="/community/managecommunity/<%= community[0]._id %>" style="display:inline-block;padding:3px 20px;text-decoration:none;color:#333333;">Manage Community</a><br>
+<a href="/community/communityprofile/<%= community[0]._id %>" style="display:inline-block;padding:3px 20px;text-decoration:none;color:#333333;">Community Profile</a><br>
+<a href="/community/communitymembers/<%= community[0]._id %>" style="display:inline-block;padding:3px 20px;text-decoration:none;color:#333333;">Community Members</a><br>
+</div>
+</div>
+</div>
+<center>
+    <hr style="border-top:2px solid #E6E6E6;width:85%;margin-top:0">
+</center>
+<div class="container col-xs-12 col-sm-offset-1 col-sm-10">
+<div class="col-xs-12 col-md-12" style="padding-bottom:5px;border-bottom:1px solid #c4c4c4">
+<a class="col-xs-12 col-sm-6" style="color:#6f6e6e;cursor:context-menu;text-decoration:none;font-size:16px;font-weight:bold;">Manage Community</a>
+<a class="col-xs-12 col-sm-3 col-md-2" style="float:right;" href="/community/inviteusers/<%= community[0]._id %>"><text>Invite Users</text></a>
+<a class="col-xs-12  col-sm-3 col-md-4" style="float:right;" href="/community/editcommunity/<%= community[0]._id %>"><text>Edit Community</text></a>
+</div>
+<div class="row" style="width:100%;display:inline-block;">
+<div class="col-sm-4 col-xs-12 col-md-3"style="padding-top:10px;">
+<div class="panel-body allSidesSoft" style="width:100%;display:inline-block;background:#fff;">
+<a class="a1" onclick="getUsers()" style="text-decoration:none;font-size:15px;padding:4px;color:#848484;font-size:15px;cursor:pointer;">
+Users (<%= community[0].members.length %>)</a><br>
+<a class="a1" onclick="getManagers()" style="text-decoration:none;font-size:15px;padding:4px;color:#848484;font-size:15px;cursor:pointer;">
+    Managers (<%= community[0].admin.length+1 %>)</a><br>
+<% if(community[0].membershipRule=="Permission"){ %>
+<a class="a1" onclick="getRequest()" style="text-decoration:none;font-size:15px;padding:4px;color:#848484;font-size:15px;cursor:pointer;">
+    Requests (<%= community[0].request.length %>)</a><br>
+<% } %>
+<a class="a1" onclick="getIM()" style="text-decoration:none;font-size:15px;padding:4px;color:#848484;font-size:15px;cursor:pointer;">
+    Invited Members (<%= community[0].invited.length %>)</a>
+</div>
+</div>
+<div class="col-sm-8 col-xs-12 col-md-9" id="manageHere" style="padding-top:10px;">
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script>
+var num=0,thiselem;
+document.getElementsByClassName('anc')[1].classList.add('active');
+document.getElementsByClassName('fa-users')[0].classList.add('act');
+function accept(elem)
+{
+    //console.log(document.getElementById('CinName').value);
+    var temp=elem.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('a')[0].id;
+    var xhttp=new XMLHttpRequest();
+    xhttp.open("PUT",'/acceptRequest');
+    xhttp.setRequestHeader("Content-Type","application/json");
+    xhttp.send(JSON.stringify({'cid':document.getElementById('CinName').value,'id':temp}));
+    xhttp.onload=function(){
+        $(elem).parent().parent().remove();
+        var num=document.getElementsByClassName('a1')[0].innerHTML.match(/\d/g).join("");
+        num=parseInt(num)+1;
+        document.getElementsByClassName('a1')[0].innerHTML="Users ("+num+")";
+        num=document.getElementsByClassName('a1')[2].innerHTML.match(/\d/g).join("");
+        num=parseInt(num)-1;
+        document.getElementsByClassName('a1')[2].innerHTML="Requests ("+num+")";
+    }
+}
+function reject(elem)
+{
+    //console.log(document.getElementById('CinName').value);
+    var temp=elem.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('a')[0].id;
+    var xhttp=new XMLHttpRequest();
+    xhttp.open("PUT",'/rejectRequest');
+    xhttp.setRequestHeader("Content-Type","application/json");
+    xhttp.send(JSON.stringify({'cid':document.getElementById('CinName').value,'id':temp}));
+    xhttp.onload=function(){
+        $(elem).parent().parent().remove();
+        var num=document.getElementsByClassName('a1')[2].innerHTML.match(/\d/g).join("");
+        num=parseInt(num)-1;
+        document.getElementsByClassName('a1')[2].innerHTML="Requests ("+num+")";       
+    }
+}
+function getUsers()
+{
+    document.getElementsByClassName('a1')[num].style.color="#848484";
+    document.getElementsByClassName('a1')[num].style.fontWeight="";
+    document.getElementsByClassName('a1')[0].style.color="#1C73DD";
+    document.getElementsByClassName('a1')[0].style.fontWeight="bold";
+    
+    var xhttp=new XMLHttpRequest();
+    xhttp.open("POST","/getCommMem/"+document.getElementById('CinName').value);
+    xhttp.setRequestHeader("Content-Type","application/json");
+    xhttp.send();
+    xhttp.onload=function(){
+        $('#manageHere').empty();
+        var data=JSON.parse(xhttp.responseText);
+        for(var i=0;i<data[0].members.length;++i)
+        {
+            var x='<div class="col-sm-9" style="width:100%;">';
+            x=x+'<div class="divumr">';
+            x=x+'<div class="col-sm-2 col-xs-3" style="padding:5px;">';
+            x=x+'<a href="/viewprofile/'+data[0].members[i].UID+'"><img src="/img/'+data[0].members[i].UID+'" style="height:50px;width:50px;border:3px solid #fff;border-radius:50%;box-shadow:0 0 10px rgba(0,0,0,0.5);"></a></div>';
+            x=x+'<div class="col-sm-8 col-xs-6">';
+            x=x+'<a href="/viewprofile/'+data[0].members[i].UID+'" style="margin-top:20px;font-weight:bold;font-size:18px;display:inline-block;text-decoration:none;white-space:nowrap;">';
+            x=x+data[0].members[i].name;
+            x=x+'</a></div><div class="col-sm-2 col-xs-3" style="padding:0px 10px;">'
+            x=x+'<a onclick="changeState1(this)" id="'+data[0].members[i].UID+'" style="font-size:20px;margin-top:20px;float:left;font-weight:900;color:#7d7d7d;cursor:pointer;"><i class="fa fa-chevron-up"></i></a>';
+            x=x+'<a onclick="changeState2(this)" id="'+data[0].members[i].UID+'" style="font-size:20px;margin-top:20px;float:right;font-weight:900;color:#7d7d7d;cursor:pointer;"><i class="fa fa-times"></i></a>'
+            x=x+'</div></div></div>';
+            $('#manageHere').append(x);
+        }
+        if(data[0].members.length==0)
+        {
+            var x='<div id="comlist"><div class="col-sm-12 allcoms well well-sm" style="margin-top:5px;font-weight:bold" id=""><center>No User Found</center></div></div>';
+            $('#manageHere').append(x);
+        }
+    }
+    num=0;
+}
+function getManagers()
+{
+    document.getElementsByClassName('a1')[num].style.color="#848484";
+    document.getElementsByClassName('a1')[num].style.fontWeight="";
+    document.getElementsByClassName('a1')[1].style.color="#1C73DD";
+    document.getElementsByClassName('a1')[1].style.fontWeight="bold";
+    
+    var xhttp=new XMLHttpRequest();
+    xhttp.open("POST","/getCommMem/"+document.getElementById('CinName').value);
+    xhttp.setRequestHeader("Content-Type","application/json");
+    xhttp.send();
+    xhttp.onload=function(){
+        $('#manageHere').empty();
+        var data=JSON.parse(xhttp.responseText);
+        for(var i=-1;i<data[0].admin.length;++i)
+        {
+            if(i==-1)
+            {
+                var x='<div class="col-sm-9" style="width:100%;">';
+                x=x+'<div class="divumr">';
+                x=x+'<div class="col-sm-2 col-xs-3" style="padding:5px;">';
+                x=x+'<a href="/viewprofile/'+data[0].owner.UID+'"><img src="/img/'+data[0].owner.UID+'" style="height:50px;width:50px;border:3px solid #fff;border-radius:50%;box-shadow:0 0 10px rgba(0,0,0,0.5);"></a></div>';
+                x=x+'<div class="col-sm-8 col-xs-6">';
+                x=x+'<a href="/viewprofile/'+data[0].owner.UID+'" style="margin-top:20px;font-weight:bold;font-size:18px;display:inline-block;text-decoration:none;white-space:nowrap;">';
+                x=x+data[0].owner.name;
+                x=x+'</a></div><div class="col-sm-2 col-xs-3" style="padding:0px 10px;">';
+                x=x+'<span class="label label-success" style="margin-top:25px;float:right;">Owner</span>';
+                x=x+'</div></div></div>';
+                $('#manageHere').append(x);
+            }
+            else
+            {
+                var x='<div class="col-sm-9" style="width:100%;">';
+                x=x+'<div class="divumr">';
+                x=x+'<div class="col-sm-2 col-xs-3" style="padding:5px;">';
+                x=x+'<a href="/viewprofile/'+data[0].admin[i].UID+'"><img src="/img/'+data[0].admin[i].UID+'" style="height:50px;width:50px;border:3px solid #fff;border-radius:50%;box-shadow:0 0 10px rgba(0,0,0,0.5);"></a></div>';
+                x=x+'<div class="col-sm-8 col-xs-6">';
+                x=x+'<a href="/viewprofile/'+data[0].admin[i].UID+'" style="margin-top:20px;font-weight:bold;font-size:18px;display:inline-block;text-decoration:none;white-space:nowrap;">';
+                x=x+data[0].admin[i].name;
+                x=x+'</a></div><div class="col-sm-2 col-xs-3" style="padding:0px 10px;">'
+                x=x+'<a onclick="changeState3(this)" id="'+data[0].admin[i].UID+'" style="font-size:20px;margin-top:20px;float:left;font-weight:900;color:#7d7d7d;cursor:pointer;"><i class="fa fa-chevron-down"></i></a>';
+                x=x+'<a onclick="changeState4(this)" id="'+data[0].admin[i].UID+'" style="font-size:20px;margin-top:20px;float:right;font-weight:900;color:#7d7d7d;cursor:pointer;"><i class="fa fa-times"></i></a>'
+                x=x+'</div></div></div>';
+                $('#manageHere').append(x);
+            }
+        }
+    }
+    num=1;
+}
+function getRequest()
+{
+    document.getElementsByClassName('a1')[num].style.color="#848484";
+    document.getElementsByClassName('a1')[num].style.fontWeight="";
+    document.getElementsByClassName('a1')[2].style.color="#1C73DD";
+    document.getElementsByClassName('a1')[2].style.fontWeight="bold";
+    
+    var xhttp=new XMLHttpRequest();
+    xhttp.open("POST","/getCommMem/"+document.getElementById('CinName').value);
+    xhttp.setRequestHeader("Content-Type","application/json");
+    xhttp.send();
+    xhttp.onload=function(){
+        $('#manageHere').empty();
+        var data=JSON.parse(xhttp.responseText);
+        for(var i=0;i<data[0].request.length;++i)
+        {
+            var x='<div class="col-sm-9" style="width:100%;">';
+            x=x+'<div class="divumr">';
+            x=x+'<div class="col-sm-2 col-xs-3" style="padding:5px;">';
+            x=x+'<a href="/viewprofile/'+data[0].request[i].UID+'"><img src="/img/'+data[0].request[i].UID+'" style="height:50px;width:50px;border:3px solid #fff;border-radius:50%;box-shadow:0 0 10px rgba(0,0,0,0.5);"></a></div>';
+            x=x+'<div class="col-sm-8 col-xs-6">';
+            x=x+'<a href="/viewprofile/'+data[0].request[i].UID+'" id="'+data[0].request[i].UID+'" style="margin-top:20px;font-weight:bold;font-size:18px;display:inline-block;text-decoration:none;white-space:nowrap;">';
+            x=x+data[0].request[i].name;
+            x=x+'</a></div><div class="col-sm-2 col-xs-3" style="padding:0px 10px;">'
+            x=x+'<span onclick="accept(this)" class="label label-success" style="background-color:#5cb85c;font-size:12px;margin-top:20px;margin-right:4px;float:left;cursor:pointer">Accept</span>';
+            x=x+'<span onclick="reject(this)" class="label label-danger" style="background-color:#d9534f;font-size:12px;margin-top:20px;margin-bottom:20px;float:left;cursor:pointer">Reject</span>';
+            x=x+'</div></div></div>';
+            $('#manageHere').append(x);
+        }
+        if(data[0].request.length==0)
+        {
+            var x='<div id="comlist"><div class="col-sm-12 allcoms well well-sm" style="margin-top:5px;font-weight:bold" id=""><center>No Pending Request Found</center></div></div>';
+            $('#manageHere').append(x);
+        }
+    }
+    num=2;
+}
+function getIM()
+{
+    document.getElementsByClassName('a1')[num].style.color="#848484";
+    document.getElementsByClassName('a1')[num].style.fontWeight="";
+    if(document.getElementsByClassName('a1')[3])
+    {
+        document.getElementsByClassName('a1')[3].style.color="#1C73DD";
+        document.getElementsByClassName('a1')[3].style.fontWeight="bold";
+        num=3;
+    }
+    else
+    {
+        document.getElementsByClassName('a1')[2].style.color="#1C73DD";
+        document.getElementsByClassName('a1')[2].style.fontWeight="bold";
+        num=2;
+    }
+    
+    var xhttp=new XMLHttpRequest();
+    xhttp.open("POST","/getCommMem/"+document.getElementById('CinName').value);
+    xhttp.setRequestHeader("Content-Type","application/json");
+    xhttp.send();
+    xhttp.onload=function(){
+        $('#manageHere').empty();
+        var data=JSON.parse(xhttp.responseText);
+        for(var i=0;i<data[0].invited.length;++i)
+        {
+            var x='<div class="col-sm-9" style="width:100%;">';
+            x=x+'<div class="divumr">';
+            x=x+'<div class="col-sm-2 col-xs-3" style="padding:5px;">';
+            x=x+'<a href="/viewprofile/'+data[0].invited[i].UID+'"><img src="/img/'+data[0].invited[i].UID+'" style="height:50px;width:50px;border:3px solid #fff;border-radius:50%;box-shadow:0 0 10px rgba(0,0,0,0.5);"></a></div>';
+            x=x+'<div class="col-sm-8 col-xs-6">';
+            x=x+'<a href="/viewprofile/'+data[0].invited[i].UID+'" style="margin-top:20px;font-weight:bold;font-size:18px;display:inline-block;text-decoration:none;white-space:nowrap;">';
+            x=x+data[0].invited[i].name;
+            x=x+'</a></div><div class="col-sm-2 col-xs-3" style="display:flex;padding:0px 10px;">'
+            x=x+'<span class="label label-warning" id="'+data[0].invited[i].UID+'" onclick="removeInvite(this)" style="font-size:14px;margin-top:20px;margin-right:4px;cursor:pointer">Remove Invite</span>';
+            x=x+'</div></div></div>';
+            $('#manageHere').append(x);
+        }
+        if(data[0].invited.length==0)
+        {
+            var x='<div id="comlist"><div class="col-sm-12 allcoms well well-sm" style="margin-top:5px;font-weight:bold" id=""><center>No Pending Invitations Found</center></div></div>';
+            $('#manageHere').append(x);
+        }
+    }
+}
+function noChangeMan()
+{
+	var div6=document.getElementById('divman6');
+	div6.style.width=0;
+	div6.style.height=0;
+    $("#b3man").remove();
+}
+function changeState1(elem)
+{
+    thiselem=elem;
+    document.getElementById('manUserH').innerHTML="Confirm Promote!";
+    document.getElementById('manUser').innerHTML="Do you really want to promote this user?";
+	var div6=document.getElementById('divman6');
+    var x='<button id="b3man" onclick="upgradeUser()" style="display:block;">YES</button>';
+    $('#divman9').append(x);document.getElementById('manUserH').innerHTML="Confirm Promote!";
+    document.getElementById('manUser').innerHTML="Do you really want to promote this user?";
+	if(parseInt(div6.style.width)==0||div6.style.width==0)
+	{
+		div6.style.width="100%";
+		div6.style.height="100vh";
+	}
+}
+function changeState2(elem)
+{
+    thiselem=elem;
+    document.getElementById('manUserH').innerHTML="Really want remove?";
+    document.getElementById('manUser').innerHTML="Do you really want to remove this user?";
+	var div6=document.getElementById('divman6');
+    var x='<button id="b3man" onclick="removeUser()" style="display:block;">YES</button>';
+    $('#divman9').append(x);
+	if(parseInt(div6.style.width)==0||div6.style.width==0)
+	{
+		div6.style.width="100%";
+		div6.style.height="100vh";
+	}
+}
+function changeState3(elem)
+{
+    thiselem=elem;
+    document.getElementById('manUserH').innerHTML="Confirm demote!";
+    document.getElementById('manUser').innerHTML="Do you really want to demote this user?";
+	var div6=document.getElementById('divman6');
+    var x='<button id="b3man" onclick="downgradeAdmin()" style="display:block;">YES</button>';
+    $('#divman9').append(x);
+	if(parseInt(div6.style.width)==0||div6.style.width==0)
+	{
+		div6.style.width="100%";
+		div6.style.height="100vh";
+	}
+}
+function changeState4(elem)
+{
+    thiselem=elem;
+    document.getElementById('manUserH').innerHTML="Really want remove?";
+    document.getElementById('manUser').innerHTML="Do you really want to remove this user?";
+	var div6=document.getElementById('divman6');
+    var x='<button id="b3man" onclick="removeAdmin()" style="display:inline-block;">YES</button>';
+    $('#divman9').append(x);
+	if(parseInt(div6.style.width)==0||div6.style.width==0)
+	{
+		div6.style.width="100%";
+		div6.style.height="100vh";
+	}
+}
+function upgradeUser(elem)    
+{
+    var xhttp=new XMLHttpRequest();
+    xhttp.open("PUT",'/upgradeUser');
+    xhttp.setRequestHeader("Content-Type","application/json");
+    xhttp.send(JSON.stringify({'cid':$("#CinName").val(),'ID':$(thiselem).attr('id')}));
+    xhttp.onload=function(){
+        $(thiselem).parent().parent().remove();
+        $("#b3man").remove();
+        var div6=document.getElementById('divman6');
+        div6.style.width=0;
+        div6.style.height=0;
+        var num=document.getElementsByClassName('a1')[0].innerHTML.match(/\d/g).join("");
+        num=parseInt(num)-1;
+        document.getElementsByClassName('a1')[0].innerHTML="Users ("+num+")";
+        num=document.getElementsByClassName('a1')[1].innerHTML.match(/\d/g).join("");
+        num=parseInt(num)+1;
+        document.getElementsByClassName('a1')[1].innerHTML="Managers ("+num+")";       
+    }
+}
+function removeUser(elem)
+{
+    
+    var xhttp=new XMLHttpRequest();
+    xhttp.open("PUT",'/removeUser');
+    xhttp.setRequestHeader("Content-Type","application/json");
+    xhttp.send(JSON.stringify({'cid':$("#CinName").val(),'ID':$(thiselem).attr('id')}));
+    xhttp.onload=function(){
+        $(thiselem).parent().parent().remove();
+        $("#b3man").remove();
+        var div6=document.getElementById('divman6');
+        div6.style.width=0;
+        div6.style.height=0;
+        var num=document.getElementsByClassName('a1')[0].innerHTML.match(/\d/g).join("");
+        num=parseInt(num)-1;
+        document.getElementsByClassName('a1')[0].innerHTML="Users ("+num+")";    
+    }
+}
+function downgradeAdmin(elem)
+{
+        
+    var xhttp=new XMLHttpRequest();
+    xhttp.open("PUT",'/downgradeAdmin');
+    xhttp.setRequestHeader("Content-Type","application/json");
+    xhttp.send(JSON.stringify({'cid':$("#CinName").val(),'ID':$(thiselem).attr('id')}));
+    xhttp.onload=function(){
+        $(thiselem).parent().parent().remove();
+        $("#b3man").remove();
+        var div6=document.getElementById('divman6');
+        div6.style.width=0;
+        div6.style.height=0;
+        var num=document.getElementsByClassName('a1')[1].innerHTML.match(/\d/g).join("");
+        num=parseInt(num)-1;
+        document.getElementsByClassName('a1')[1].innerHTML="Managers ("+num+")";
+        num=document.getElementsByClassName('a1')[0].innerHTML.match(/\d/g).join("");
+        num=parseInt(num)+1;
+        document.getElementsByClassName('a1')[0].innerHTML="Users ("+num+")";
+    }
+}
+function removeAdmin(elem)
+{
+        
+    var xhttp=new XMLHttpRequest();
+    xhttp.open("PUT",'/removeAdmin');
+    xhttp.setRequestHeader("Content-Type","application/json");
+    xhttp.send(JSON.stringify({'cid':$("#CinName").val(),'ID':$(thiselem).attr('id')}));
+    xhttp.onload=function(){
+        $(thiselem).parent().parent().remove();
+        $("#b3man").remove();
+        var div6=document.getElementById('divman6');
+        div6.style.width=0;
+        div6.style.height=0;
+        var num=document.getElementsByClassName('a1')[1].innerHTML.match(/\d/g).join("");
+        num=parseInt(num)-1;
+        document.getElementsByClassName('a1')[1].innerHTML="Managers ("+num+")";
+    }
+}
+function removeInvite(elem)
+{
+    var xhttp=new XMLHttpRequest();
+    xhttp.open("PUT",'/removeInvitation');
+    xhttp.setRequestHeader("Content-Type","application/json");
+    xhttp.send(JSON.stringify({'cid':$("#CinName").val(),'id':elem.id}));
+    xhttp.onload=function(){
+        $(elem).parent().parent().remove();
+        var div6=document.getElementById('divman6');
+        div6.style.width=0;
+        div6.style.height=0;
+        var pos;
+        if(document.getElementsByClassName('a1')[3])
+            pos=3;
+        else
+            pos=2;
+        var num=document.getElementsByClassName('a1')[pos].innerHTML.match(/\d/g).join("");
+        num=parseInt(num)-1;
+        document.getElementsByClassName('a1')[pos].innerHTML="Invited Members ("+num+")";
+    }
+}
+</script>
+</html>

@@ -1,0 +1,416 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/trumbowyg/dist/ui/trumbowyg.min.css">
+<style>
+*{
+	box-sizing: border-box;
+}
+html{
+	height:100%;
+	overflow:auto;
+}
+::-webkit-scrollbar {
+    display:none;
+}
+body{
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	line-height: 1.42857143;
+	background-color: #f1f3f3;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+}
+.alert-wrappernb{
+	position: absolute;
+	width: 100%;
+}
+.alertnb {
+	display: inline-grid;
+	z-index: 10;
+	position: relative;
+	width: 100%;
+	height: 0px;
+	background-color: #f44336;
+	overflow: hidden;
+	color: white;
+	transition: 0.5s;
+}
+.d1{
+	overflow: hidden;
+	background-color: #222D3C;
+	height: 60px;
+	z-index:1;
+	width: 100%;
+	display: block;
+    padding: 0px 20px;
+}
+#div1-wrapper{
+	height: 60px;
+}
+.d1 a{
+	float: left;
+	color: #f2f2f2;
+	text-align: center;
+	padding-right: 50px;
+	text-decoration: none;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 20px;
+	font-weight: bold;
+}
+.d1{
+	padding-top: 15px;
+	box-sizing: border-box;
+}
+.d1 span{
+	color: white;
+}
+.d2{
+	height: 100%;
+	width: 50px;;
+	position: fixed;
+	z-index: 1;
+	top: 60px;
+	left: 0;
+	background-color: #000000;
+	overflow: auto;
+	transition: 0.5s;
+}
+#div2-wrapper{
+	position: absolute;
+	display: inline-block;
+}
+.d2 a{	
+	display: block; 
+	padding: 11px 4px 11px 15px;
+	text-decoration: none;
+	color: #999999;
+	transition: 0.1s;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 15px;
+	white-space: nowrap;
+	cursor: pointer;
+}
+.fa{
+	font-size: 21px;
+	padding-right: 10px;
+}
+.d2 a:hover:not(.active){
+	background-color: #111; 
+	border-left: 2px solid red;
+	color: white;
+}
+.active{
+	background-color: #337AB7; 
+}
+.active:hover{
+	border-left: 2px solid red;
+}
+.d2 img{
+	width: 60px;
+	height: 60px;
+}
+.act{
+	color: white;
+}
+.sadmin{
+	float: right;
+	padding: .2em .6em .3em;
+	font-size: 75%;
+	margin-top: 7px;
+    font-weight: 700;
+    line-height: 1;
+	border-radius: 4px;
+}
+.img1{
+	cursor: pointer;
+    width: 40px;
+    margin-left: 30px;
+    margin-right: 10px;
+    float: right;
+    border-radius: 50%;
+}
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+	z-index:20;
+}
+.animdiv{
+	position:relative;
+	width:0%;
+	height:0;
+	overflow: hidden;
+	transition-duration: 0.4s;
+    	transition-timing-function: cubic-bezier(0.36, 0.55, 0.19, 1);
+	transition-property: width, height; 
+}
+#div3{
+	background-color: #414F66;
+	opacity:0.95;
+}
+#divman6{
+	background-color: rgba(112,128,144,0.2);	
+    display:inline-block;
+    z-index:20;
+}
+@media (min-width : 0px) {
+    #divman9 { display:inline-block;width: 83.33%; }
+}    
+@media (min-width : 768px) {
+    #divman9 { display:inline-block;width: 345px; }
+}
+@media (min-width : 992px) {
+    #divman9 { display:inline-block;width: 293.33px; }
+}
+#divman9{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+	margin: auto;
+	overflow: hidden;
+	float: left;
+	border-radius: 5px;
+	box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+	padding: 15px 15px;
+	margin-left:auto;
+	margin-right:auto;
+	line-height: 20px;
+}
+#b4man,#b3man{
+	text-rendering: auto;
+	height: 32px;
+	color:white;
+	font-size: 14px;
+	font-weight: 900;
+	margin:0px 2px 4px;
+	padding: 6px 12px;
+	text-align: center;
+	cursor: pointer;
+	border: 0;
+	border-radius: 4px;
+	float: right;
+}
+#b3man{
+	background-color:#5cb85c;
+}
+#b4man{
+	background-color:#d9534f;
+}
+#b1,#b2{
+	background-color:#303F53;
+	color:white;
+	text-shadow:none;
+	padding:10px;
+	min-width:100px;
+	font-size:16px;
+	cursor:pointer;
+	border:0;
+	border-radius:2px;
+	margin-bottom: 4px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+.d4{
+	animation: shake 0.82s infinite;
+	transform: translate3d(0, 0, 0);
+	backface-visibility: hidden;
+	animation-play-state: paused;
+}
+@keyframes shake{
+	0%,%,55%,85% { transform: translate(1px, 0px); }
+	10%,30%,60%,90% { transform: translate(-1px, -0px); }
+	20%,35%,65%,95% { transform: translate(-4px, 0px); }
+	30%,40%,70%,100% { transform: translate(4px, 0px); }
+	40%,45%,75% { transform: translate(-8px, 0px); }
+	50%,50%,80% { transform: translate(8px, 0px); 
+}
+#b1,#b2{
+	animation-play-state: paused;
+}
+</style>
+<div class="alert-wrappernb">
+<div class="alertnb" id="alert1">
+	<center id="alert1Center">
+	</center>
+</div>
+</div>
+<div class="alert-wrappernb">
+<div class="alertnb" id="alert2" style="background-color:#4CAF50">
+	<center id="alert2Center">
+	</center>
+</div>
+</div>
+<div id="div1-wrapper">
+<div id="div1" class="d1">
+<a href="javascript:window.location.href=window.location.href">cq</a>
+<span style="cursor:pointer;top: 5px;left:30px;position:relative" id="funcnav1" onclick="funcNav()"><i class="fa fa-th-large" style="font-size:16px;"></i></span>
+<img class="img1 hidden-xs" src="/image/<%= pId %>" style="height: 40px;display: block">
+<span class="sadmin" style="background-color: #f0ad4e;"><%= name %></span>
+</div>
+</div>
+<div id="div2-wrapper" class="hidden-xs">
+<div id="div2" class="d2">
+<div class="visible-xs">
+<center>
+<img src="/image/<%= pId %>" style="height:75px;width:75px;margin:15px;">
+</center>
+</div>
+<a id="funcnav2" class="hidden-xs" onclick="funcNav()"><span class="fa"><i class="fa fa-bars"></i></span>cq</a>
+<a class="anc" href="/profile"><span class="fa"><i class="fa fa-user"></i></span><%= name %></a>
+<a class="anc" href="/community/communitypanel"><span class="fa"><i class="fa fa-users"></i></span>Communities</a>
+<a class="anc" href="/changePassword"><span class="fa"><i class="fa fa-lock"></i></span>Change Password</a>
+<a onclick="logOut()"><span class="fa"><i class="fa fa-sign-out-alt"></i></span>Logout</a>
+</div>
+</div>
+
+<div id="divman6-wrapper">
+<div id="divman6" class="animdiv">
+<div id="divman7" style="width:100%;height:100vh;" onclick="animman()" class="d4">
+<div id="divman9" style="background-color:white;">
+<div id="manUserH" style="display:inline-block;font-family:Helvetica;font-size:22px;color:#575757;padding:0px 0px 15px;text-rendering:auto;width:100%;"></div><br>
+<div id="manUser" style="display:inline-block;font-family:Helvetica;color:#575757;font-size:14px;padding:0px 0px 20px;text-rendering:auto;width:100%;"></div><br>
+<button id="b4man" onclick="noChangeMan()" style="display:inline-block;">NO</button>
+</div>
+</div>
+</div>
+</div>
+
+<footer>
+<div id="div3" class="animdiv">
+<div id="div4" style="display:table;width:100%;height:100vh;" onclick="ani()" class="d4">
+<div id="div5" style="display:table-cell;text-align:center;margin:auto;vertical-align:middle;">
+<p>
+<font style="font-family:Helvetica;font-size:28px;color:white;">Confirm Logout!</font><br><br>
+<font face="Helvetica" color="white" style="font-size:14px;">Do you really want logout?</font><br><br>
+<button id="b1" onclick="logOut()">Yes</button>
+<button id="b2" onclick="goHome()">No</button>
+</p>
+</div>
+</div>
+</div>
+</footer>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
+<script src="/trumbowyg/dist/trumbowyg.min.js"></script>
+<script type="text/javascript">
+$("#funcnav1").click(function(){
+	if($(window).width()>=768)
+	{
+		if($("#div2").width()==250)
+		{
+			$("#pmain").animate({left: "0px",}, 400 );
+		}
+		else
+		{
+			$( "#pmain" ).animate({left: "200px",}, 400 );
+		}
+	}
+});
+$("#funcnav2").click(function(){
+	if($(window).width()>=768)
+	{
+		if($("#div2").width()==250)
+		{
+			$("#pmain").animate({left: "0px",}, 400 );
+		}
+		else
+		{
+			$( "#pmain" ).animate({left: "200px",}, 400 );
+		}
+	}
+});
+</script>
+<script>
+function funcNav()
+{
+	var div2=document.getElementById('div2');
+	if($(window).width()<768)
+	{
+		document.getElementById('div2-wrapper').classList.toggle("hidden-xs");
+		document.getElementById('div2-wrapper').classList.toggle("col-xs-10");
+		if(div2.style.width=="250px")
+		{
+			div2.style.width="50px";
+		}
+		else
+		{
+			div2.style.width="250px"; 	
+		} 	
+	}
+	else
+	{
+		if(div2.style.width=="250px")
+		{
+			div2.style.width="50px";
+		}
+		else
+		{
+			div2.style.width="250px"; 	
+		}
+	}
+}
+function animman()
+{
+	if(event.target==document.getElementById('b3')||event.target==document.getElementById('b4'))
+		return;
+	document.getElementById("divman7").style.animationPlayState = "running";
+	setTimeout(function(){ document.getElementById("divman7").style.animationPlayState = "paused"; }, 820);
+}
+function logOut()
+{
+	var div3=document.getElementById('div3');
+	if(parseInt(div3.style.width)==0||div3.style.width==0)
+	{
+		div3.style.width="100%";
+		div3.style.height="100vh";
+	}
+	else
+	{
+		var xhttp= new XMLHttpRequest();
+		xhttp.open("GET","/logout");
+		xhttp.send();
+		xhttp.onload=function(){
+			location.href="/";
+		}
+	}
+}
+function goHome()
+{
+	var div3=document.getElementById('div3');
+	div3.style.width=0;
+	div3.style.height=0;
+}
+function ani()
+{
+	if(event.target==document.getElementById('b2')||event.target==document.getElementById('b1'))
+		return;
+	document.getElementById("div4").style.animationPlayState = "running";
+	setTimeout(function(){ document.getElementById("div4").style.animationPlayState = "paused"; }, 820);
+}
+var flag;
+if($(window).innerWidth()<=767)
+	flag=0;
+else
+	flag=1;
+$(window).resize(()=>{
+	if($(window).innerWidth()<=767&&flag==1)
+	{
+		if($("#pmain").position().left!=0)
+			$("#pmain").animate({left: "0px",}, 400 );
+		if(document.getElementById("div2").style.width=="250px")
+		{
+			document.getElementById('div2-wrapper').classList.toggle("hidden-xs");
+			document.getElementById('div2-wrapper').classList.toggle("col-xs-10");
+		}
+		flag=0;
+	}
+	else if($(window).innerWidth()>767&&flag==0)
+	{
+		if(document.getElementById("div2").style.width=="250px")
+			$("#pmain").animate({left: "200px",}, 400 );
+		flag=1;
+	}
+});
+</script>

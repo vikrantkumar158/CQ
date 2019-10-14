@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CQ</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="/DataTables.css">
+<style>
+*{
+	box-sizing: border-box;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+}
+.combox{
+	background: rgba(0,0,0,0.5); 
+	position: fixed;
+	top:0;
+	right:0;
+	bottom:0;
+	left:0;
+	width:100%;
+	z-index:11;
+	overflow: auto;
+	color:#333333;
+}
+.combox1{
+	display: block;
+	position:relative;
+	transform: translate(0,0);
+	transition: transform .3s ease-out;
+	width: 600px;
+	margin: 30px auto;
+}
+.combox2{
+	overflow: hidden;
+	display: block;
+	box-shadow: 0 5px 15px rgba(0,0,0,.5);
+	position: relative;
+	background-color:#fff;
+	border: 1px solid rgba(0,0,0,.2);
+	border-radius: 6px;
+}
+.fade {
+    opacity: 0;
+    transition: opacity .15s linear;
+}
+.fade.in{
+	opacity: 1;
+}
+.fillbox{
+	background-color:#ffffff;
+	padding:6px 12px;
+	width:100%;block
+	height:34px;
+	color:#555;
+	border: 1px solid #ccc;
+    border-radius: 4px;
+}
+#comTitlex{
+	margin-left: 20%;
+    margin-top: 7%;
+    font-weight: bold;
+    font-size: 15px;
+    word-wrap: break-word;
+}
+#pmain{
+	position: fixed;
+	left:0px;
+	right:0;
+	top:60px;
+	bottom:0;
+	margin: auto;
+	overflow: auto;
+}
+#dataTable{
+	margin: 10px;
+	overflow: hidden;
+}
+@media (min-width: 768px){
+	#dataTable{
+		margin-left: 60px;
+	}
+}
+.FilterBar{
+	border-radius: 4px;
+	font-size: 14px;
+	height: 34px;
+	padding: 6px 12px;
+	font-weight: bold;
+	border: 2px solid #2D312C;
+    background-color: #2D312C;
+    color: #fff;
+}
+@media (min-width: 768px)
+{
+	.FilterBar{
+		float:right;
+		margin-right: 10px;
+	}
+}
+@media (max-width: 767px)
+{
+	.FilterBar{
+		margin-top: 10px;
+	}
+	.PFil{
+		display: flex;
+		justify-content: space-evenly;
+	}
+}
+#example_wrapper div{
+	margin-top: 25px;
+	margin-bottom: 10px;
+}
+#example_length{
+	font-size: 14px;
+}
+#example_length select{
+	width:75px;
+	display: inline-block;
+	vertical-align: middle;
+	height: 30px;
+	line-height: 30px;
+	padding: 5px 10px;
+	font-size: 12px;
+	border-radius: 3px;
+	color: #555;
+    background-color: #fff;
+}
+#example_filter{
+	font-size: 14px;
+}
+#example_filter input{
+	height: 30px;
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+	color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+}
+#example{
+	position: relative;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+	font-weight: 500;
+	border: 1px solid #ddd;
+	border-bottom: 1px solid black;
+}
+#example td,th{
+	vertical-align: top;
+	white-space: nowrap;
+	border: 1px solid #ddd;
+}
+.actionbtns{
+	display: inline-block;
+	margin:35px 5px 0px;
+	margin-bottom:0;
+	padding:5px 0px 5px 10px;
+	line-height: 1.5;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+}
+</style>
+</head>
+<body>
+<div id="comdesc" class="combox fade" style="display:none;">
+<div id="comdesc1" class="combox1">
+<div id="comdesc2" class="combox2">
+<div style="padding: 15px;border-bottom:1px solid #eee;">
+<span id="comTitle" style="font-size:18px;font-weight:bold;"></span>
+<button type="button" onclick="document.getElementById('comdesc').style.display='none';document.getElementById('comdesc').classList.remove('in');" style="float:right;cursor:pointer;border:0;background-color:inherit;font-weight:700;color:#333333;font-size:21;opacity:0.3;">x</button>
+<p id="CommunityAdminPop" style="font-size:10px;margin:0px 0px 10px;"></p>
+</div>
+<div style="position:relative;padding:15px;display:block;border-bottom:1px solid #eee;">
+<div style="display:block;margin:15px -15px;overflow:auto;">
+<span style="position:relative;display:inline-block;padding:7px 15px 0px;font-size:14px;font-weight:700;text-align:right;width:16.67%;float:left;">Community Name:</span>
+<div style="width:83.33%;float:left;position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;">
+<input type="text" class="fillbox" id="comname">
+</div>
+</div>
+<div style="display:block;margin-bottom:15px;margin-left:-15px;margin-right:-15px;overflow:auto;">
+<span style="position:relative;display:inline-block;padding:7px 15px 0px;font-size:14px;font-weight:700;text-align:right;width:16.67%;float:left;">Community Status:</span>
+<div style="width:83.33%;float:left;position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;">
+<select class="fillbox" id="comstatus">
+<option value="Active">Active</option>
+<option value="Deactive">Deactive</option>
+</select>
+</div>
+</div>
+<div style="display:block;margin-bottom:15px;margin-left:-15px;margin-right:-15px;overflow:auto;">
+<div style="margin-left:16.67%;width:83.33%;float:left;position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;">
+<input class="fillbox" id="emailsubx5" type="submit" value="Update" onclick="updateCom()"style="display:inline-block;width:auto;border-radius:0;">
+</div>
+</div>
+</div>
+<div style="padding:15px;overflow:auto;">
+<input class="fillbox" type="submit" value="Close" style="display:inline-block;width:auto;float:right;border-radius:0;" onclick="document.getElementById('comdesc').style.display='none';document.getElementById('comdesc').classList.remove('in');">
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="comdescx" class="combox fade" style="display:none;">
+<div id="comdescx1" class="combox1">
+<div id="comdescx2" class="combox2">
+<div style="padding: 15px;border-bottom:1px solid #eee;display:block;overflow:auto;">
+<div style="display:block;"><img src="defaultCommunity.jpg" style="height:100px;width:100px;float:left;box-shadow: 0 0 10px rgba(0,0,0,0.6);"></div>
+<button type="button" onclick="document.getElementById('comdescx').style.display='none';document.getElementById('comdescx').classList.remove('in');" style="float:right;cursor:pointer;border:0;background-color:inherit;font-weight:700;color:#333333;font-size:21;opacity:0.3;">x</button>
+<p id="comTitlex" style="font-size:15px;font-weight:bold;"></p>
+</div>
+<div style="border-bottom:1px solid #eee;padding-bottom:15px;">
+<p style="font-size:15px;font-weight:700;padding-left:15px;">Community Description</p>
+<div class="fillbox" id="comdescr" style="display:table;width:95%;padding:34px;margin:0px auto 20px;background-color: #f5f5f5;border: 1px solid #e3e3e3;"></div>
+</div>
+<div style="padding:15px;overflow:auto;">
+<input class="fillbox" type="submit" value="Close" style="display:inline-block;width:auto;float:right;border-radius:0;" onclick="document.getElementById('comdescx').style.display='none';document.getElementById('comdescx').classList.remove('in');">
+</div>
+</div>
+</div>
+</div>
+</div>
+<% if(role=='Superadmin'){ %>
+<% include partials/navbar %>
+<% } %>
+<% if(role=='Admin'){ %>
+<% include partials/navbar0 %>
+<% } %>
+<div id="pmain" >
+<div id="dataTable">
+<div class="PFil">
+<div style="position: sticky;width: 100%;">
+<div class="FilterBar col-xs-5 col-sm-3 col-md-2" id="UserList" style="float: left;">Community List</div>
+<select class="FilterBar col-xs-offset-2 col-xs-5 col-sm-offset-0 col-sm-2" id="statusFilter">
+<option value="">All</option>
+<option value="Direct">Direct</option>
+<option value="Permission">Permission</option>
+</select>
+<button onclick="refresh()" class="FilterBar col-xs-5 col-sm-2" style="float:right;background-color:#2D312C;color:#fff;cursor:pointer;">
+<span class="fa fa-refresh" style="font-size:14px;"></span>Refresh
+</button>
+</div>
+</div>
+<div style="overflow:scroll;width:100%;">
+<table id="example" class="display" style="width:100%">
+        <thead style="">
+            <tr>
+                <th style="width:120px;border-bottom:2px solid #ddd;">Community Name</th>
+                <th style="width:117px;border-bottom:2px solid #ddd;">Membership Rule</th>
+                <th style="width:49px;border-bottom:2px solid #ddd;">Community Loctaion</th>
+                <th style="width:140px;border-bottom:2px solid #ddd;">Community Owner</th>
+                <th style="width:125px;border-bottom:2px solid #ddd;">Create Date</th>
+                <th style="width:78px;border-bottom:2px solid #ddd;">Actions</th>
+				<th style="width:112px;border-bottom:2px solid #ddd;">Community Pic</th>
+				<th style="display:none;">Activity</th>
+				<th style="display:none;">Description</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+	</div>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#example').DataTable({
+		aoColumnDefs : [{ 'bSortable': false, 'aTargets': [1,5,6] }],
+		searching : true,
+		ordering : true,
+		processing : true,
+		serverSide : true,
+		stateSave : true,
+		ajax : { 
+			url : "/communities",
+			type : "POST",
+			data : function(d){
+				d.status=$('#statusFilter').val();
+			}
+		},	
+		columns : [
+			{ "data": "name", "name": "name" },
+			{ "data": "membershipRule", "name": "membershipRule" },
+			{ "data": "location", "name": "location" },
+			{ "data": "owner.name", "name": "owner" },
+			{ "data": "createDate", "name": "createDate" },
+			{
+				"data": null,
+				render: function(data,type,row){
+					var x='<center>';
+					x=x+'<a class="actionbtns" style="background-color:#2D312C;" onclick="editCom(this)"><span class="fa fa-edit" style="color:white;font-size:12px;"></span></a>';
+					x=x+'<a class="actionbtns" style="background-color:#2D312C;" onclick="comDesc(this)"><span class="fa fa-info" style="color:white;font-size:12px;"></span></a>';
+					x=x+'</center>';
+					return x;
+				}
+			},
+			{
+				"data": null,
+				render: function(data,type,row){
+
+					var x='<img src="/image/'+ data.picId+'" style="width:80px;height:80px;border: 4px solid '
+					if(data.activity=='Active')
+						x+='green;">';
+					else
+						x+='red;">';
+					x=x+'<div style="display:none;">'+data.activity+'</div>';
+					x=x+'<div style="display:none;">'+data.description+'</div>';
+					x=x+'<div style="display:none;">'+data._id+'</div>';
+					return x;
+				},
+				className:"text-center"
+			}
+		],
+		drawCallback : function(settings){
+      		console.log('DataTables has redrawn the table');
+    	}
+	});
+});
+$('#statusFilter').on('change',function(){
+	$('#example').DataTable().draw();
+});
+</script>
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script>
+document.getElementsByClassName('anc')[3].classList.add('active');
+document.getElementsByClassName('fa-list-alt')[0].classList.add('act');
+var toUpdateCom,uname;
+function refresh()
+{
+	location.href='/community/communityList';
+}
+function editCom(elem)
+{
+	uname=elem;
+	document.getElementById('comdesc').classList.add("in");
+	document.getElementById('comdesc').style.display="block";
+	toUpdateCom=elem.parentNode.parentNode.parentNode.cells[6].getElementsByTagName('div')[2].innerHTML;
+	document.getElementById('comTitle').innerHTML="Update "+elem.parentNode.parentNode.parentNode.cells[0].innerHTML;
+	document.getElementById('CommunityAdminPop').innerHTML="Created by "+elem.parentNode.parentNode.parentNode.cells[3].innerHTML+" ,"+elem.parentNode.parentNode.parentNode.cells[4].innerHTML;
+	document.getElementById('comname').value=elem.parentNode.parentNode.parentNode.cells[0].innerHTML;
+	document.getElementById('comstatus').value=elem.parentNode.parentNode.parentNode.cells[6].getElementsByTagName('div')[0].innerHTML;
+}
+function comDesc(elem)
+{
+	document.getElementById('comdescx').classList.add("in");
+	document.getElementById('comdescx').style.display="block";
+	document.getElementById('comTitlex').innerHTML="Community: "+elem.parentNode.parentNode.parentNode.cells[0].innerHTML;
+	document.getElementById('comdescr').innerHTML=elem.parentNode.parentNode.parentNode.cells[6].getElementsByTagName('div')[1].innerHTML;
+}
+function updateCom()
+{
+	var request=new XMLHttpRequest();
+	request.open("PUT",'/updateCommunity');
+	request.setRequestHeader("Content-Type", "application/json");
+	request.send(JSON.stringify({
+		'ID': toUpdateCom,
+		'newName': document.getElementById('comname').value,
+		'activity': document.getElementById('comstatus').value
+	}));
+	request.onload=function()
+	{
+		$('#example').DataTable().draw();
+		document.getElementById("alert2Center").innerHTML='Community "'+document.getElementById('comname').value+'" Updated';
+		document.getElementById("alert2").style.height="60px";
+		document.getElementById("alert2").style.padding="20px";
+		setTimeout(function(){
+		document.getElementById("alert2").style.height="0px";
+		document.getElementById("alert2").style.padding="0px";
+		},2000);
+		document.getElementById('comdesc').style.display='none';
+		document.getElementById('comdesc').classList.remove('in');
+	}
+}
+</script>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CQ</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<style>
+*{
+	box-sizing: border-box;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+}
+.alert-wrapper{
+	position: absolute;
+	width: 100%;
+}
+.alert {
+	display: inline-grid;
+	z-index: 10;
+	position: relative;
+	width: 100%;
+	height: 0px;
+	background-color: #f44336;
+	overflow: hidden;
+	color: white;
+	transition: 0.5s;
+}
+#pmain{
+	position: fixed;
+	left:0px;
+	right:0;
+	top:60px;
+	bottom:0;
+	margin: auto;
+	overflow: auto;
+}
+#divTag1{
+	top: 0;
+	left:0;
+	right:0;
+	bottom:0;
+	padding:0px 15px;
+	padding-top: 100px;
+}
+#divOfTag{
+	background-color: white;
+	box-shadow: 0 0 10px rgba(0,0,0,0.6);
+	padding:0px 15px;
+	overflow: hidden;
+	width: 100%;
+}
+.TagHead{
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 24px;
+	color: #707070;
+	font-weight: 500;
+	padding-bottom: 9px;
+    margin: 40px 0 20px;
+    border-bottom: 1px solid #eee;
+}
+.form-control{
+	display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+#tagSubmitBtn{
+	color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+.tagListShow{
+	padding: 8px 10px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 12px;
+	color: #fff;
+    background-color: #f0ad4e;
+    border-color: #eea236;
+	text-decoration: none;
+}
+</style>
+</head>
+<body>
+<% include partials/navbar %>
+<div id="pmain" >
+<div id="divTag1" class="col-xs-offset-1 col-xs-10 col-sm-offset-4 col-sm-5">
+<div id="divOfTag">
+<h3 class="TagHead">Create Tag</h3>
+<form id="TagForm">
+<div style="margin-bottom:15px;">
+<input class="form-control" type="text" placeholder="Tag Name" id="tagInputField" autocomplete="off" required="">
+</div>
+<div style="margin-bottom:15px;">
+<input class="form-control" type="submit" value="Submit" id="tagSubmitBtn">
+</div>
+</form>
+</div>
+<div style="margin-top:14px;">
+<center>
+<a href="/tag/tagslist" class="tagListShow" style="margin-top:10px;">Tag Lists</a>
+</center>
+</div>
+</div>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script>
+document.getElementsByClassName('anc')[4].classList.add('active');
+document.getElementsByClassName('fa-tags')[0].classList.add('act');
+var input1 = document.getElementById('tagInputField');
+var info = document.getElementById('tagSubmitBtn');
+info.onclick=function subForm()
+{
+	var mon=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"];
+	var x=input1.value.replace(/\s/g, '');
+	if(x=="")
+		return;
+	event.preventDefault();
+	var d=new Date();
+	var hours=d.getHours();
+	var AMPM="AM";
+	if(hours>12)
+	{
+		hours%=12;
+		AMPM="PM";
+	}
+	hours>=10?hours=hours:hours='0'+hours;
+	var mins=d.getMinutes();
+	mins>=10?mins=mins:mins='0'+mins;
+	var date=d.getDate()+"-"+mon[d.getMonth()]+"-"+d.getFullYear()+"    ( "+hours+":"+mins+" "+AMPM+" )";
+	var request=new XMLHttpRequest();
+	request.open("POST","/addTag");
+	request.setRequestHeader("Content-Type", "application/json");
+	request.send(JSON.stringify({'tagName': input1.value,'createDate': date}));
+	request.onload=function(){
+		var data=JSON.parse(request.responseText);
+		if(data.length==0)
+		{
+			input1.value="";
+			document.getElementById("alert2Center").innerHTML="Saved";
+			document.getElementById("alert2").style.height="60px";
+			document.getElementById("alert2").style.padding="20px";
+			setTimeout(function(){
+			document.getElementById("alert2").style.height="0px";
+			document.getElementById("alert2").style.padding="0px";
+			},2000);
+			
+		}
+		else
+		{
+			input1.value="";
+			document.getElementById("alert1Center").innerHTML="Tag already exist";
+			document.getElementById("alert1").style.height="60px";
+			document.getElementById("alert1").style.padding="20px";
+			setTimeout(function(){
+			document.getElementById("alert1").style.height="0px";
+			document.getElementById("alert1").style.padding="0px";
+			},2000);
+		}
+	}
+}
+</script>
+</html>
