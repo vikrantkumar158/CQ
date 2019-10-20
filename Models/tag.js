@@ -1,45 +1,11 @@
-var mongoose=require('mongoose');
-var tagDetails = require('.././db/tag');
-var ObjectId = require('mongodb').ObjectID;
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
-exports.getTags = (cb)=>
-{
-	tagDetails.find({}).exec((err,data)=>{
-		if(err)
-			cb(err);
-		cb(null,data);
-	});
-}
+var tagSchema = Schema({
+	tagName: String,
+	createdBy: String,
+	createDate: String
+});
 
-exports.getTagByName = (name,cb)=>{
-	tagDetails.find({tagName:name}).exec((err,data)=>{
-		if(err)
-			cb(err);
-		cb(null,data);
-	});
-}
-
-exports.removeTag = (name,cb)=>
-{
-	tagDetails.remove({tagName: name}).exec((err,data)=>{
-		if(err)
-			cb(err);
-		cb(null,data);
-	});
-}
-
-exports.addTag = (props,role,cb)=>
-{
-	var newTagDetails=new tagDetails({
-		tagName: props.tagName,
-		createdBy: role,
-		createDate: props.createDate
-	});
-	newTagDetails.save()
-	.then(data=>{
-		cb(null,data);
-	})
-	.catch(err=>{
-		cb(err);
-	});
-}
+var tagDetails = mongoose.model("tagdetails",tagSchema);
+module.exports=tagDetails;

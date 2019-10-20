@@ -10,13 +10,13 @@ router.use(session({
 }));
 
 var auth=require('../.././Middlewares/auth');
-var user=require('../.././Models/user');
+var user=require('../.././Controllers/user');
 var multer=require('../.././Middlewares/multer');
 var mail=require('../.././Middlewares/nodemailer');
-var community=require('../.././Models/community');
-var reply=require('../.././Models/reply');
-var tag=require('../.././Models/tag');
-var comment=require('../.././Models/comment');
+var community=require('../.././Controllers/community');
+var reply=require('../.././Controllers/reply');
+var tag=require('../.././Controllers/tag');
+var comment=require('../.././Controllers/comment');
 
 router.get('/logout',(req,res,next)=>{
 	req.session.destroy();

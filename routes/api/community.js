@@ -2,9 +2,9 @@ var express = require('express');
 const router = express.Router();
 
 var auth=require('../.././Middlewares/auth');
-var user=require('../.././Models/user');
-var community=require('../.././Models/community');
-var comment=require('../.././Models/comment');
+var user=require('../.././Controllers/user');
+var community=require('../.././Controllers/community');
+var comment=require('../.././Controllers/comment');
 
 router.get('/communitypanel',auth,(req,res,next)=>{
 	

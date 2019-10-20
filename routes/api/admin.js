@@ -2,7 +2,7 @@ var express = require('express')
 const router = express.Router();
 
 var auth=require('../.././Middlewares/auth');
-var user=require('../.././Models/user');
+var user=require('../.././Controllers/user');
 
 router.get('/profile',auth,(req,res,next)=>{
 	user.getUserByEmail(req.session.userName,(err,updata)=>{
