@@ -1,6 +1,9 @@
 var express=require('express');
 var path = require('path');
+var bcrypt = require('bcrypt');
 var router=express.Router();
+
+var mail=require('.././Middlewares/nodemailer');
 
 var passport = require('passport');
 var GitHubStrategy = require('passport-github').Strategy;
@@ -17,18 +20,18 @@ passport.use(new GitHubStrategy({
 		callbackURL: "http://127.0.0.1:8000/auth/github/callback"
 	},
 	function(accessToken, refreshToken, profile, cb) {
-		userDetails.find({ email: profile._json.email }, 
+		userDetails.find({ email: profile._json.email },
 		function (err, user) {
 			if(err)
 				cb(err);
-		if(user.length==0)	
+		if(user.length==0)
 		{
 			var newUserDetails=new userDetails({
 				name: profile._json.name,
 				email: profile._json.email,
 				password: bcrypt.hashSync(profile._json.node_id.substring(0,8),10),
 				city: profile._json.location,
-				phoneno: "", 
+				phoneno: "",
 				gender: "Male",
 				dob: "",
 				role: "User",
@@ -48,7 +51,7 @@ passport.use(new GitHubStrategy({
 					subject: 'Invitation to CQ',
 					text: 'Welcome to CQ. Username: '+savedData.email+' Password: '+profile._json.node_id.substring(0,8)+'. Please update your password on login.'
 				};
-				transporter.sendMail(mailOptions, function(error, info){
+				mail.sendMail(mailOptions, function(error, info){
 					if (error){
 						cb(error);
 					}
@@ -92,7 +95,7 @@ router.get('/github/callback',passport.authenticate('github',{failureRedirect:'/
 			req.session.isLogin=3;
 			req.session.userName=req.user[0].email;
 			req.session.role=req.user[0].role;
-		}	
+		}
 		else
 		{
 			req.session.isLogin=1;

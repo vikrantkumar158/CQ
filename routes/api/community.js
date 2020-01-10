@@ -7,7 +7,7 @@ var community=require('../.././Controllers/community');
 var comment=require('../.././Controllers/comment');
 
 router.get('/communitypanel',auth,(req,res,next)=>{
-	
+
 	community.getOwnerAndAdmin(req.session.userName,(err,data1)=>{
 		if(err)
 			res.send(err);
@@ -43,7 +43,7 @@ router.get('/communityList',auth,(req,res,next)=>{
 		if(req.session.role=='Superadmin'||req.session.role=='Admin')
 			res.render('CommunityList',{role:req.session.role,pId:updata[0].picId,name:updata[0].name});
 		else
-			res.redirect('/');	
+			res.redirect('/');
 	});
 });
 
@@ -93,7 +93,7 @@ router.get('/editcommunity/:id',auth,(req,res,next)=>{
                 if(req.session.role=='UAdmin'||req.session.role=='USuperadmin'||req.session.role=='User'||req.session.role=='Community Builder')
                     res.render('EditCommunity',{role:req.session.role,pId:updata[0].picId,name:updata[0].name,commdata:data});
                 else
-                    res.redirect('/');    
+                    res.redirect('/');
             }
             else
                 res.redirect('/');
@@ -126,14 +126,14 @@ router.get('/discussion/:id',auth,(req,res,next)=>{
 							res.render('CommunityDiscussion',{role1:req.session.role,uId:updata[0]._id,role:'member',pId:updata[0].picId,name:updata[0].name,community:data,chat:chats});
 						}
 					}
-					else 
+					else
 						res.redirect('/');
 				});
 			});
 		}
 		else
 		{
-			res.redirect('/brokenCommunity.html');
+			res.sendFile('brokenCommunity.html',{root: './public'});
 		}
 	});
 });
@@ -164,7 +164,7 @@ router.get('/managecommunity/:id',auth,(req,res,next)=>{
 		}
 		else
 		{
-			res.redirect('/brokenCommunity.html');
+			res.sendFile('brokenCommunity.html',{root: './public'});
 		}
 	});
 });
@@ -195,7 +195,7 @@ router.get('/inviteusers/:id',auth,(req,res,next)=>{
 		}
 		else
 		{
-			res.redirect('/brokenCommunity.html');
+			res.sendFile('brokenCommunity.html',{root: './public'});
 		}
 	});
 });
@@ -249,7 +249,7 @@ router.get('/communityprofile/:id',auth,(req,res,next)=>{
 		}
 		else
 		{
-			res.redirect('/brokenCommunity.html');
+			res.sendFile('brokenCommunity.html',{root: './public'});
 		}
 	});
 });
@@ -271,23 +271,23 @@ router.get('/communitymembers/:id',auth,(req,res,next)=>{
 				{
 					if(req.session.role=='UAdmin'||req.session.role=='USuperadmin'||req.session.role=='User'||req.session.role=='Community Builder')
 						res.render('CommunityMembers',{role1:req.session.role,role:'owner',pId:updata[0].picId,name:updata[0].name,community : data});
-					else 
+					else
 						res.redirect('/');
 				}
 				else if(data[0].members.some(el=>el.user==req.session.userName))
 				{
 					if(req.session.role=='UAdmin'||req.session.role=='USuperadmin'||req.session.role=='User'||req.session.role=='Community Builder')
 						res.render('CommunityMembers',{role1:req.session.role,role:'member',pId:updata[0].picId,name:updata[0].name,community : data});
-					else 
+					else
 						res.redirect('/');
 				}
-				else 
+				else
 					res.redirect('/');
 			});
 		}
 		else
 		{
-			res.redirect('/brokenCommunity.html');
+			res.sendFile('brokenCommunity.html',{root: './public'});
 		}
 	});
 });

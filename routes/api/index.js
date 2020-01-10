@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcrypt');
 var session = require('express-session');
+var path = require('path');
 
 router.use(session({
 	secret: "xYzUCAchitkara",
@@ -33,7 +34,7 @@ router.get('/',(req,res,next)=>{
 	}
 	else
 	{
-		res.redirect('/login.html');
+		res.sendFile('login.html',{root: './public'});
 	}
 });
 
@@ -63,7 +64,7 @@ router.get('/editProfile',auth,(req,res,next)=>{
 		res.redirect('/');
 });
 
-router.get('/editInformation',auth,(req,res,next)=>{
+router.get('/editInformation',(req,res,next)=>{
 	user.getUserByEmail(req.session.userName,(err,updata)=>{
 		if(err)
 			res.send(err);
@@ -99,7 +100,7 @@ router.get('/viewprofile/:id',auth,(req,res,next)=>{
         }
         else
             res.redirect('/')
-    }); 
+    });
 });
 
 router.get('/tag',auth,(req,res,next)=>{
@@ -258,7 +259,7 @@ router.put('/updateUser',(req,res,next)=>{
 
 router.put('/deleteChat/:id',(req,res,next)=>{
 	comment.delete(req.params.id,(err,data)=>{
-		if(err)	
+		if(err)
 			res.send(err);
 		res.send(data);
 	});
@@ -266,7 +267,7 @@ router.put('/deleteChat/:id',(req,res,next)=>{
 
 router.post('/updateByOwner/:id',(req,res,next)=>{
     multer.upload(req,res,(err)=>{
-        if (err){ 
+        if (err){
             res.send({ 'msg': err});
         }else{
         	community.update(req,(err,data)=>{
@@ -320,7 +321,7 @@ router.put('/CSVInvite/:cid/:id',(req,res,next)=>{
 		email: req.params.id,
 		password: bcrypt.hashSync("qwerty", 10),
 		city: "N/A",
-		phoneno: "N/A", 
+		phoneno: "N/A",
 		gender: "Male",
 		dob: "01/01/1970",
 		role: "User",
@@ -493,7 +494,7 @@ router.put("/deleteReply/:id",(req,res,next)=>{
 			if(err)
 				res.send(err);
 			res.send(info);
-		});	
+		});
 	});
 });
 
@@ -505,7 +506,7 @@ router.put("/deleteReplyReply/:id",(req,res,next)=>{
 			if(err)
 				res.send(err);
 			res.send(info);
-		});	
+		});
 	});
 });
 
@@ -586,23 +587,23 @@ router.post('/users',(req,res,next)=>{
 		fCount=totalCount;
 	});
 	if(serby=='email')
-	{	
+	{
 		var obj={'email':req.body.order[0].dir};
 	}
 	else if(serby=='phoneno')
-	{	
+	{
 		var obj={'phoneno':req.body.order[0].dir};
 	}
 	else if(serby=='city')
-	{	
+	{
 		var obj={'city':req.body.order[0].dir};
 	}
 	else if(serby=='status')
-	{	
+	{
 		var obj={'status':req.body.order[0].dir};
 	}
 	else
-	{	
+	{
 		var obj={'role':req.body.order[0].dir};
 	}
 	user.getUserByDemand(fin,start,obj,size,(err,data)=>{
@@ -616,7 +617,7 @@ router.post('/users',(req,res,next)=>{
 router.post('/addChat/:id',(req,res,next)=>{
 	user.getUserByEmail(req.session.userName,(err,data)=>{
 	    multer.upload(req,res,(err)=>{
-	        if (err){ 
+	        if (err){
 	            res.send({ 'msg': err});
 	        }else{
 	        	comment.addComment(req,data,(err,savedData)=>{
@@ -639,7 +640,7 @@ router.post('/addReply/:id',(req,res,next)=>{
 			comment.increaseCount(req.params.id,1,(err,data)=>{
 				if(err)
 					res.status(400).send(error);
-				res.send(savedData);		
+				res.send(savedData);
 			});
 		});
 	});
@@ -655,7 +656,7 @@ router.post('/addReplyReply/:id',(req,res,next)=>{
 			reply.increaseCount(req.params.id,1,(err,data)=>{
 				if(err)
 					res.status(400).send(error);
-				res.send(savedData);		
+				res.send(savedData);
 			});
 		});
 	});
@@ -683,19 +684,19 @@ router.post('/communities',(req,res,next)=>{
 		fCount=totalCount;
 	});
 	if(serby=='name')
-	{	
+	{
 		var obj={'name':req.body.order[0].dir};
 	}
 	else if(serby=='location')
-	{	
+	{
 		var obj={'location':req.body.order[0].dir};
 	}
 	else if(serby=='owner')
-	{	
+	{
 		var obj={'owner.name':req.body.order[0].dir};
 	}
 	else
-	{	
+	{
 		var obj={'createDate':req.body.order[0].dir};
 	}
 	community.getCommunityByDemand(fin,start,obj,size,(err,data)=>{
@@ -757,7 +758,7 @@ router.post('/addComm',(req,res,next)=>
     	if(error)
     		res.send(error);
 		multer.upload(req,res,(err)=>{
-		    if (err){ 
+		    if (err){
 		        res.send({ 'msg': err});
 		    }else{
 		    	community.addCommunity(req,data,(err,savedData)=>{
@@ -799,7 +800,7 @@ router.post('/login',(req,res,next)=>{
 					req.session.userName=req.body.userName;
 					req.session.role=data[0].role;
 					res.send(data);
-				}	
+				}
 				else
 				{
 					req.session.isLogin=1;
@@ -814,7 +815,7 @@ router.post('/login',(req,res,next)=>{
 
 router.post('/updateProfile',(req,res,next)=>{
 	multer.upload(req,res,(err)=>{
-        if (err) 
+        if (err)
             res.send({ 'msg': err});
         user.updateUser(req.body,req.file,(err,data)=>{
         	if(err)

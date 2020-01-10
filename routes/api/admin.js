@@ -24,7 +24,7 @@ router.get('/switchAsUser',auth,(req,res,next)=>{
 	if(req.session.role=='Admin'||req.session.role=='Superadmin')
 	{
 		req.session.role='U'+req.session.role;
-		res.redirect('/loading.html');
+		res.sendFile('loading.html',{root: './public'});
 	}
 	else
 	{
@@ -36,7 +36,7 @@ router.get('/switchAsAdmin',auth,(req,res,next)=>{
 	if(req.session.role=='UAdmin'||req.session.role=='USuperadmin')
 	{
 		req.session.role=req.session.role.substring(1);
-		res.redirect('/loading1.html');
+		res.sendFile('loading1.html',{root: './public'});
 	}
 	else
 	{
