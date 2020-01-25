@@ -30,4 +30,4 @@ mongoose.connection.on('connected',(err)=>{
 	console.log('DB connected');
 });
 
-app.listen(port,()=>{console.log("Listening on port "+port);});
+app.listen(process.env.PORT || port,()=>{console.log("Listening on port "+port);});
