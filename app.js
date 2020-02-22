@@ -2,8 +2,7 @@ var express = require('express')
 var path = require('path');
 var http = require('http');
 var app = express();
-var cors=require('cors')
-var cors_proxy=require('cors-anywhere');
+var cors=require('cors');
 var port=8000;
 
 var mongoose=require('mongoose');
@@ -32,8 +31,4 @@ mongoose.connection.on('connected',(err)=>{
 	console.log('DB connected');
 });
 
-cors_proxy.createServer({
-    originWhitelist: [], // Allow all origins
-    requireHeader: ['origin', 'x-requested-with'],
-    removeHeaders: ['cookie', 'cookie2']
-}).listen(process.env.PORT || port,process.env.HOST||'127.0.0.1',()=>{console.log("Listening on port "+port);});
+app.listen(process.env.PORT || port,()=>{console.log("Listening on port "+port);});
