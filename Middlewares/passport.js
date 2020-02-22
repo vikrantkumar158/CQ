@@ -20,10 +20,8 @@ passport.use(new GitHubStrategy({
 		callbackURL: "https://code-quotient.herokuapp.com/auth/github/callback"
 	},
 	function(accessToken, refreshToken, profile, cb) {
-		console.log("1");
 		userDetails.find({ email: profile._json.email },
 		function (err, user) {
-			console.log("2");
 			if(err)
 				cb(err);
 		if(user.length==0)
