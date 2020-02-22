@@ -18,7 +18,8 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname,'public')));
 app.use(require('./routes'));
 
-var mongoDB='mongodb://localhost/myDB';
+
+var mongoDB='mongodb+srv://Vikrant:mongodb@1401@cluster0-qd890.mongodb.net/myDB';
 
 mongoose.connect(mongoDB,{useNewUrlParser:true});
 

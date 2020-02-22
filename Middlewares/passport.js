@@ -15,8 +15,8 @@ var mongoose = require('mongoose')
 var userDetails = mongoose.model("userdetails");
 
 passport.use(new GitHubStrategy({
-		clientID: 'de29796f48ae4d8a99bf',
-		clientSecret: 'ca0657e89b377782dfe3f5fb4ff7b3433d17eee1',
+		clientID: process.env.clientID,
+		clientSecret: process.env.clientSecret,
 		callbackURL: "http://127.0.0.1:8000/auth/github/callback"
 	},
 	function(accessToken, refreshToken, profile, cb) {
@@ -46,7 +46,7 @@ passport.use(new GitHubStrategy({
 			newUserDetails.save()
 			.then(savedData => {
 				var mailOptions={
-					from: 'vikrant@cq.com',
+					from: process.env.user,
 					to: savedData.email,
 					subject: 'Invitation to CQ',
 					text: 'Welcome to CQ. Username: '+savedData.email+' Password: '+profile._json.node_id.substring(0,8)+'. Please update your password on login.'
