@@ -17,7 +17,7 @@ var userDetails = mongoose.model("userdetails");
 passport.use(new GitHubStrategy({
 		clientID: process.env.clientID,
 		clientSecret: process.env.clientSecret,
-		callbackURL: "http://127.0.0.1:8000/auth/github/callback"
+		callbackURL: "https://code-quotient.herokuapp.com//auth/github/callback"
 	},
 	function(accessToken, refreshToken, profile, cb) {
 		userDetails.find({ email: profile._json.email },
